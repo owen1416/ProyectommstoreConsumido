@@ -1,0 +1,18 @@
+﻿@model ProyectommstoreConsumido.Models.Productos
+
+@if (Model != null)
+{
+    <h3>Detalles del Producto</h3>
+    <p><strong>Nombre:</strong> @Model.Nombre</p>
+    <p><strong>Marca:</strong> @Model.Marca</p>
+    <p><strong>Modelo:</strong> @Model.Modelo</p>
+    <p><strong>Descripción:</strong> @Model.Descripcion</p>
+    <p><strong>Precio:</strong> @Model.Precio</p>
+    <p><strong>Stock:</strong> @Model.Stock</p>
+    <p><strong>Categoría:</strong> @Model.Categoria</p>
+    <button type="button" class="btn btn-sm btn-secondary" onclick="$('#detallesProducto').empty();">Cerrar Detalles</button>
+}
+else
+{
+    <p>No se encontraron detalles para este producto.</p>
+}

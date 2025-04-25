@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        #wrapper {
+            display: flex;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        #sidebar {
+            width: 240px;
+            height: 100vh;
+            background-color: #4b0081;
+            color: white;
+            padding: 20px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            #sidebar h2 {
+                color: #ecf0f1;
+                margin-bottom: 30px;
+            }
+
+            #sidebar .nav-link {
+                color: #bdc3c7;
+                font-size: 16px;
+                padding: 10px;
+                border-radius: 4px;
+                transition: background 0.2s;
+            }
+
+                #sidebar .nav-link:hover {
+                    background-color: #34495e;
+                    color: #fff;
+                }
+
+                #sidebar .nav-link i {
+                    margin-right: 10px;
+                }
+
+        #main-content {
+            margin-left: 0;
+            width: 100%;
+            transition: margin-left 0.3s ease-in-out;
+            padding: 20px;
+        }
+
+            #main-content.shifted {
+                margin-left: 240px;
+            }
+
+        #menuToggle {
+            top: 15px; /* Ajusta según sea necesario */
+            left: 15px; /* Ajusta según sea necesario */
+            background-color: #343a40;
+            color: white;
+            border: none;
+            padding: 10px 12px;
+            font-size: 24px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            z-index: 1100; /* Asegura que esté por encima del sidebar */
+            position: absolute; /* O relative, dependiendo del contexto */
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="wrapper">
+        <div id="sidebar" class="collapsed">
+            <h2><i class="bi bi-box"></i> Inventario</h2>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="bi bi-house-door"></i> Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#productosMenu"><i class="bi bi-wrench"></i> Mantenimiento</a>
+                    <div class="collapse" id="productosMenu">
+                        <a class="nav-link ms-4" href="@Url.Action("PRODUCTO_LISTADO", "Producto")"><i class="bi bi-layers"></i>Productos</a>
+                        <a class="nav-link ms-4" href="@Url.Action("PRODUCTO_INSERTADO", "Producto")"><i class="bi bi-person-fill"></i>Usuarios</a>
+                        <a class="nav-link ms-4" href="#">Editar</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#stockMenu"><i class="bi bi-boxes"></i> Stock</a>
+                    <div class="collapse" id="stockMenu">
+                        <a class="nav-link ms-4" href="#">Ver</a>
+                        <a class="nav-link ms-4" href="#">Entrada</a>
+                        <a class="nav-link ms-4" href="#">Salida</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-stack"></i> Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people"></i> Clientes</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bar-chart-line"></i> Reportes</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Configuración</a></li>
+            </ul>
+        </div>
+
+        <div id="main-content">
+            <div class="container-fluid pt-4">
+                <button id="menuToggle"><i class="bi bi-bar-chart-steps"></i></button>
+
+                <hr class="my-4">
+                <div class="row">
+                    @RenderBody()
+                    <hr />
+                    <footer>
+                        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById("menuToggle");
+            const sidebar = document.getElementById("sidebar");
+            const wrapper = document.getElementById("wrapper");
+            const mainContent = document.getElementById("main-content");
+
+            if (toggleBtn && sidebar && wrapper && mainContent) {
+                toggleBtn.addEventListener("click", () => {
+                    sidebar.classList.toggle("active");
+                    wrapper.classList.toggle("shifted");
+                    mainContent.classList.toggle("shifted");
+                });
+            } else {
+                console.error("Uno o más elementos del menú no se encontraron en el DOM.");
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const botonesEliminar = document.querySelectorAll(".btnEliminarProducto");
+
+            botonesEliminar.forEach(boton => {
+                boton.addEventListener("click", function () {
+                    const formulario = this.closest("form");
+
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "Este producto será eliminado permanentemente.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            formulario.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const botonesEliminar = document.querySelectorAll(".btnEliminarProducto");
+
+            botonesEliminar.forEach(boton => {
+                boton.addEventListener("click", function () {
+                    const formulario = this.closest("form");
+
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "Este producto será eliminado permanentemente.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            formulario.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var nuevoProductoBtn = document.getElementById("btnNuevoProducto");
+            var crearProductoModal = document.getElementById("crearProductoModal");
+
+            if (nuevoProductoBtn && crearProductoModal) {
+                nuevoProductoBtn.addEventListener("click", function () {
+                    $(crearProductoModal).modal('show');
+                });
+            } else {
+                console.error("No se encontraron el botón o el modal.");
+            }
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            console.log("El script de detalles se está ejecutando."); // Verifica si el script se carga
+
+            $(".btnVerDetalles").click(function () {
+                console.log("Se hizo clic en el botón Detalles."); // Verifica si el evento de clic se dispara
+                var productoId = $(this).data("producto-id");
+                console.log("ID del producto:", productoId); // Verifica si se obtiene el ID correctamente
+                $.ajax({
+                    url: '@Url.Action("MostrarDetallesProducto", "Producto")',
+                    type: 'GET',
+                    data: { id: productoId },
+                    success: function (data) {
+                        $("#detallesProducto").html(data);
+                    },
+                    error: function (error) {
+                        console.error("Error al cargar los detalles:", error);
+                        $("#detallesProducto").html("<p>Error al cargar los detalles del producto.</p>");
+                    }
+                });
+            });
+        });
+    </script>
+    </script>
+</body>
+</html>

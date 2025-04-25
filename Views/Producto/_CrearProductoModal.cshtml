@@ -1,0 +1,191 @@
+﻿@model ProyectommstoreConsumido.Models.Productos
+
+<div class="modal fade custom-modal" id="crearProductoModal" tabindex="-1" role="dialog" aria-labelledby="crearProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title" id="crearProductoModalLabel"><i class="bi bi-plus-circle-fill me-2"></i> Registrar Nuevo Producto</h5>
+                
+            </div>
+            <div class="modal-body custom-modal-body">
+                @using (Html.BeginForm("PRODUCTO_INSERTADO", "Producto", FormMethod.Post, new { id = "crearProductoForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+              
+
+                    <div class="mb-2">
+                        <label for="Nombre" class="form-label"><i class="bi bi-tag-fill me-2"></i> Nombre</label>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Nombre" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Marca" class="form-label"><i class="bi bi-bookmark-fill me-2"></i> Marca</label>
+                        @Html.EditorFor(model => model.Marca, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Marca" } })
+                        @Html.ValidationMessageFor(model => model.Marca, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Modelo" class="form-label"><i class="bi bi-layers-fill me-2"></i> Modelo</label>
+                        @Html.EditorFor(model => model.Modelo, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Modelo" } })
+                        @Html.ValidationMessageFor(model => model.Modelo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Descripcion" class="form-label"><i class="bi bi-file-text-fill me-2"></i> Descripción</label>
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", rows = "2", placeholder = "Descripción" } })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Precio" class="form-label"><i class="bi bi-cash-coin me-2"></i> Precio</label>
+                        @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", type = "number", step = "0.01", placeholder = "Precio" } })
+                        @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Stock" class="form-label"><i class="bi bi-box-seam-fill me-2"></i> Stock</label>
+                        @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", type = "number", min = "0", placeholder = "Stock" } })
+                        @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Categoria" class="form-label"><i class="bi bi-folder-fill me-2"></i> Categoría</label>
+                        @Html.EditorFor(model => model.Categoria, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Categoría" } })
+                        @Html.ValidationMessageFor(model => model.Categoria, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="modal-footer custom-modal-footer d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-primary rounded-pill btn-lg"><i class="bi bi-save-fill me-2"></i> Registrar</button>
+                        <button type="button"  data-bs-dismiss="modal" aria-label="Cerrar" class="btn btn-danger rounded-pill btn-lg"><i class="bi bi-x-circle-fill me-2"></i> Cancelar</button>
+                    </div>
+                }
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Diseño Minimalista con Énfasis Primario */
+    .custom-modal .modal-dialog {
+        max-width: 550px;
+        margin: 60px auto;
+    }
+
+    .custom-modal-content {
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        border: none;
+        background-color: #fff;
+        color: #495057;
+    }
+
+    .custom-modal-header {
+        background-color: #007bff; /* Fondo azul primario */
+        color: #fff;
+        border-bottom: 3px solid #0056b3; /* Línea inferior más gruesa y oscura */
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .custom-modal-header .modal-title {
+            font-size: 1.05rem;
+            font-weight: 400;
+        }
+
+        .custom-modal-header .btn-close {
+            margin-left: 1rem;
+            padding: 0.25rem;
+            background: transparent url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M1.5 1.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V1.5zM14 2.5a.5.5 0 0 0-.5-.5H2.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-11zm-9.646 2.354a.5.5 0 0 0-.708.708L7.293 8 4.646 10.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.646-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+            border: 0;
+            border-radius: 0.25rem;
+            opacity: 0.8;
+        }
+
+            .custom-modal-header .btn-close:hover {
+                opacity: 1;
+            }
+
+    .custom-modal-body {
+        padding: 1.75rem 2rem;
+        background-color: #fff;
+    }
+
+    .custom-modal-footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+        .custom-modal-footer .btn {
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+        }
+
+        .custom-modal-footer .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+        }
+
+            .custom-modal-footer .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+                box-shadow: 0 3px 6px rgba(0, 86, 179, 0.2);
+            }
+
+        .custom-modal-footer .btn-secondary {
+            color: #495057;
+            background-color: #e2e6ea;
+            border-color: #e2e6ea;
+        }
+
+            .custom-modal-footer .btn-secondary:hover {
+                color: #495057;
+                background-color: #d1d9dd;
+                border-color: #d1d9dd;
+            }
+
+    /* Estilos para los elementos del formulario */
+    .form-label {
+        font-size: 0.85rem;
+        color: #343a40;
+        margin-bottom: 0.2rem;
+        font-weight: 500;
+    }
+
+    .form-control {
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        font-size: 0.9rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .text-danger {
+        font-size: 0.8rem;
+        color: #dc3545;
+        margin-top: 0.15rem;
+    }
+
+    .d-grid .btn-primary {
+        padding: 0.7rem 1.4rem;
+        font-size: 0.95rem;
+        border-radius: 6px;
+    }
+    </style>
