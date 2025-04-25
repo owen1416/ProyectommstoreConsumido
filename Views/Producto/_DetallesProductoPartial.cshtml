@@ -2,17 +2,26 @@
 
 @if (Model != null)
 {
-    <h3>Detalles del Producto</h3>
-    <p><strong>Nombre:</strong> @Model.Nombre</p>
-    <p><strong>Marca:</strong> @Model.Marca</p>
-    <p><strong>Modelo:</strong> @Model.Modelo</p>
-    <p><strong>Descripción:</strong> @Model.Descripcion</p>
-    <p><strong>Precio:</strong> @Model.Precio</p>
-    <p><strong>Stock:</strong> @Model.Stock</p>
-    <p><strong>Categoría:</strong> @Model.Categoria</p>
-    <button type="button" class="btn btn-sm btn-secondary" onclick="$('#detallesProducto').empty();">Cerrar Detalles</button>
+    <div class="card shadow-sm p-3 mb-3 bg-light rounded">
+        <h5 class="card-title text-primary">Detalles del Producto</h5>
+        <div class="card-body">
+            <p class="card-text"><strong>Nombre:</strong> @Model.Nombre</p>
+            <p class="card-text"><strong>Marca:</strong> @Model.Marca</p>
+            <p class="card-text"><strong>Modelo:</strong> @Model.Modelo</p>
+            @if (!string.IsNullOrEmpty(Model.Descripcion))
+            {
+                <p class="card-text"><strong>Descripción:</strong> @Model.Descripcion</p>
+            }
+            <p class="card-text"><strong>Precio:</strong> @Model.Precio.ToString("C")</p>
+            <p class="card-text"><strong>Stock:</strong> @Model.Stock</p>
+            <p class="card-text"><strong>Categoría:</strong> @Model.Categoria</p>
+            <button type="button" class="btn btn-sm btn-outline-danger y mt-2" onclick="$('#detallesProducto').empty();">Cerrar Detalles</button>
+        </div>
+    </div>
 }
 else
 {
-    <p>No se encontraron detalles para este producto.</p>
+    <div class="alert alert-warning" role="alert">
+        No se encontraron detalles para este producto.
+    </div>
 }
