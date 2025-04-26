@@ -43,7 +43,7 @@
                     <td style="padding: 0.6rem; font-size: 0.85rem; border-bottom: 1px solid #e9ecef;">@Html.DisplayFor(modelItem => item.Stock) unidades</td>
                     <td style="padding: 0.6rem; font-size: 0.85rem; border-bottom: 1px solid #e9ecef;">@Html.DisplayFor(modelItem => item.Categoria)</td>
                     <td class="text-center" style="padding: 0.6rem; font-size: 0.85rem; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; justify-content: center;">
-                        <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-producto-id="@item.ProductoID">Detalles</button>
+                        <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-producto-id="@item.ProductoID"><i class="bi bi-eye me-2"></i></button>
                         @Html.ActionLink("Editar", "Edit", new { id = item.ProductoID }, new { @class = "btn btn-sm btn-outline-primary rounded-pill me-1", style = "font-size: 0.75rem;" })
                         @using (Html.BeginForm("PRODUCTO_ELIMINADO", "Producto", new { id = item.ProductoID }, FormMethod.Post, new { @class = "formEliminarProducto" }))
                         {

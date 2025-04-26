@@ -70,7 +70,7 @@ namespace ProyectommstoreConsumido.Controllers
         {
             Session.Clear();
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("LOGIN", "Login");
         }
     }
 

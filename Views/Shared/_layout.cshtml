@@ -6,8 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         body {
@@ -86,6 +85,29 @@
             z-index: 1100; /* Asegura que esté por encima del sidebar */
             position: absolute; /* O relative, dependiendo del contexto */
         }
+
+        /*css para animacion al abrir el mensaje de cerrar sesion*/
+        #confirmLogoutModal .modal-dialog {
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        #confirmLogoutModal.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        #confirmLogoutModal.fade .modal-dialog {
+            transform: translateY(30px); /* Aseguramos el estado inicial para .fade también */
+            opacity: 0;
+        }
+
+        #confirmLogoutModal.fade.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+      
     </style>
 </head>
 <body>
@@ -118,8 +140,14 @@
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people"></i> Clientes</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bar-chart-line"></i> Reportes</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Configuración</a></li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link cerrar-sesion-link btn btn-warning d-inline-flex align-items-center">
+                        <i class="bi bi-power me-2"></i> Cerra Sesion
+                    </a>
+                </li>
             </ul>
         </div>
+
 
         <div id="main-content">
             <div class="container-fluid pt-4">
@@ -137,6 +165,27 @@
         </div>
     </div>
 
+    
+
+    <div id="confirmLogoutModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0 shadow-lg rounded-3 text-center">
+                <div class="modal-header border-bottom-0 p-3 d-flex justify-content-center">
+                    <i class="bi bi-exclamation-circle text-warning" style="font-size: 4em;"></i>
+                </div>
+                <div class="modal-body p-3">
+                    <h5 class="modal-title text-secondary fw-semibold mb-2" style="font-size: 1.5em;">¿Estás seguro?</h5>
+                    <p class="mb-0 fs-6 text-secondary">cerraras sesion inmediatamente</p>
+                </div>
+                <div class="modal-footer border-top-0 p-3 justify-content-center">
+                    <a href="@Url.Action("Logout", "Login")" class="btn btn-danger btn-sm rounded-pill px-3" style="font-size: 0.9em;">Cerrar Sesion</a>
+                    <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3 me-2" style="font-size: 0.9em;" data-bs-dismiss="modal">Seguir trabajando</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -146,8 +195,18 @@
     @RenderSection("Scripts", required: false)
 
 
+    <script>
+        //js para mensaje de confirmacion del boton de cerrar sesion
+        $(document).ready(function () {
+            $('.cerrar-sesion-link').click(function (e) {
+                e.preventDefault(); // Evita la navegación inmediata
+                $('#confirmLogoutModal').modal('show'); // Muestra el modal
+            });
+        });
+    </script>
 
     <script>
+        //js para adarptar la pagina cuando se habra o cierra el menu lateral
         document.addEventListener('DOMContentLoaded', () => {
             const toggleBtn = document.getElementById("menuToggle");
             const sidebar = document.getElementById("sidebar");
@@ -167,6 +226,7 @@
     </script>
 
     <script>
+        //js para mensaje de boton eliminar
         document.addEventListener("DOMContentLoaded", function () {
             const botonesEliminar = document.querySelectorAll(".btnEliminarProducto");
 
@@ -192,33 +252,9 @@
             });
         });
     </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const botonesEliminar = document.querySelectorAll(".btnEliminarProducto");
 
-            botonesEliminar.forEach(boton => {
-                boton.addEventListener("click", function () {
-                    const formulario = this.closest("form");
-
-                    Swal.fire({
-                        title: '¿Estás seguro?',
-                        text: "Este producto será eliminado permanentemente.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            formulario.submit();
-                        }
-                    });
-                });
-            });
-        });
-    </script>
     <script>
+        //js para ventana de registrar producto
         $(document).ready(function () {
             var nuevoProductoBtn = document.getElementById("btnNuevoProducto");
             var crearProductoModal = document.getElementById("crearProductoModal");
@@ -233,7 +269,9 @@
         });
 
     </script>
+
     <script>
+//js para detalles
         $(document).ready(function () {
             console.log("El script de detalles se está ejecutando."); // Verifica si el script se carga
 
@@ -256,6 +294,6 @@
             });
         });
     </script>
-    </script>
+
 </body>
 </html>
