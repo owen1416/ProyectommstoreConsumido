@@ -133,6 +133,76 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
+    <script>
+        //js para mensaje de boton eliminar
+        document.addEventListener("DOMContentLoaded", function () {
+            const botonesEliminar = document.querySelectorAll(".btnEliminarProducto");
+
+            botonesEliminar.forEach(boton => {
+                boton.addEventListener("click", function () {
+                    const formulario = this.closest("form");
+
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "Este producto será eliminado permanentemente.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            formulario.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script>
+
+//js para detalles
+        $(document).ready(function () {
+            console.log("El script de detalles se está ejecutando."); // Verifica si el script se carga
+
+            $(".btnVerDetalles").click(function () {
+                console.log("Se hizo clic en el botón Detalles."); // Verifica si el evento de clic se dispara
+                var productoId = $(this).data("producto-id");
+                console.log("ID del producto:", productoId); // Verifica si se obtiene el ID correctamente
+                $.ajax({
+                    url: '@Url.Action("MostrarDetallesProducto", "Producto")',
+                    type: 'GET',
+                    data: { id: productoId },
+                    success: function (data) {
+                        $("#detallesProducto").html(data);
+                    },
+                    error: function (error) {
+                        console.error("Error al cargar los detalles:", error);
+                        $("#detallesProducto").html("<p>Error al cargar los detalles del producto.</p>");
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        //js para ventana de registrar producto
+        $(document).ready(function () {
+            var nuevoProductoBtn = document.getElementById("btnNuevoProducto");
+            var crearProductoModal = document.getElementById("crearProductoModal");
+
+            if (nuevoProductoBtn && crearProductoModal) {
+                nuevoProductoBtn.addEventListener("click", function () {
+                    $(crearProductoModal).modal('show');
+                });
+            } else {
+                console.error("No se encontraron el botón o el modal.");
+            }
+        });
+
+    </script>
 
 
 }

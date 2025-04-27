@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="mb-2">
-                        <label for="Email" class="form-label"><i class="bi bi-envelope-fill"></i>Email</label>
+                        <label for="Email" class="form-label"><i class="bi bi-envelope-fill"></i> Email</label>
                         @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Email" } })
                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     </div>
