@@ -1,0 +1,198 @@
+﻿@model ProyectommstoreConsumido.Models.RegistroViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "Registro";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-image: url('https://images.hdqwalls.com/download/taj-mahal-minimal-art-4k-wu-1920x1080.jpg'); /* Reemplaza con tu imagen */
+            background-size: cover;
+            background-position: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.2);
+            background-blend-mode: multiply;
+        }
+
+        .register-container { /* Cambiamos el nombre del contenedor */
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 360px;
+            border: 1px solid #ddd;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative; /* Importante: Establece el contexto de posicionamiento */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+            .input-group i {
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #777;
+                font-size: 1.1em;
+                margin-right: 8px;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+            border-radius: 0;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: transparent;
+            color: #333;
+            padding-left: 25px; /* Espacio para el icono */
+        }
+
+            .form-control::placeholder {
+                color: #bbb;
+            }
+
+        .btn-register { /* Nuevo nombre para el botón */
+            background: linear-gradient(90deg, #3f51b5, #e040fb);
+            color: white;
+            padding: 14px 0;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-top: 20px; /* Añadimos un poco de margen superior */
+        }
+
+            .btn-register:hover {
+                background: linear-gradient(90deg, #283593, #c2185b);
+            }
+
+        .register-link { /* Mantenemos el nombre */
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+            .register-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+        .validation-summary-errors {
+            color: red;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .field-validation-error {
+            color: red;
+            font-size: 0.9em;
+            position: absolute; /* Lo saca del flujo normal del documento */
+            top: 100%; /* Coloca el mensaje justo debajo del elemento al que está asociado */
+            left: 0; /* Alineado a la izquierda del campo de entrada */
+            width: 100%; /* Ocupa el ancho del campo de entrada */
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+            z-index: 10; /* Asegura que el mensaje esté por encima de otros elementos si es necesario */
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2><i class="fas fa-user-plus"></i> Crear Cuenta</h2>
+        @using (Html.BeginForm("Register", "Login", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+
+            <div class="form-group">
+                <label for="NombreUsuario">Usuario</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "form-control", placeholder = "Tu usuario" })
+                    @Html.ValidationMessageFor(m => m.NombreUsuario, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Contraseña">Contraseña</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    @Html.PasswordFor(m => m.Contraseña, new { @class = "form-control", placeholder = "Tu contraseña" })
+                    @Html.ValidationMessageFor(m => m.Contraseña, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="ConfirmarContraseña">Confirmar Contraseña</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    @Html.PasswordFor(m => m.ConfirmarContraseña, new { @class = "form-control", placeholder = "Confirma tu contraseña" })
+                    @Html.ValidationMessageFor(m => m.ConfirmarContraseña, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="Email">Correo Electrónico</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Tu correo electrónico", type = "email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "field-validation-error" })
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register"><i class="fas fa-user-plus"></i> Registrar</button>
+
+            <div class="register-link">
+                ¿Ya tienes una cuenta? <a href="@Url.Action("Login", "Login")"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+            </div>
+        }
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    {}
+</body>
+</html>
+
+

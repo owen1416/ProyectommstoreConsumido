@@ -149,10 +149,13 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Productos.cs" />
+    <Compile Include="Models\RegistroDTOApi.cs" />
+    <Compile Include="Models\RegistroViewModel.cs" />
     <Compile Include="Models\Usuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -209,6 +212,9 @@
     <Content Include="Views\Login\LOGIN.cshtml" />
     <Content Include="Views\Producto\_CrearProductoModal.cshtml" />
     <Content Include="Views\Producto\_DetallesProductoPartial.cshtml" />
+    <Content Include="Views\Login\Register.cshtml" />
+    <Content Include="Views\Usuario\USUARIO_LISTADO.cshtml" />
+    <Content Include="Views\Usuario\_CrearUsuarioModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

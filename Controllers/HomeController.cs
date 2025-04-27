@@ -12,6 +12,8 @@ namespace ProyectommstoreConsumido.Controllers
 {
     public class HomeController : Controller
     {
+
+
         public ActionResult Index()
         {
             List<Productos> lista = null;

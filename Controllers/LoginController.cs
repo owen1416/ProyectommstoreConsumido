@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -44,15 +45,11 @@ namespace ProyectommstoreConsumido.Controllers
                     if (resultadoLogin != null && resultadoLogin.IsAuthenticated)
                     {
                         Session["UserId"] = resultadoLogin.UsuarioID;
-                        Session["AuthToken"] = resultadoLogin.Token;
                         FormsAuthentication.SetAuthCookie(usuarios.NombreUsuario, false);
 
                         return RedirectToAction("Index", "Home");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", resultadoLogin?.ErrorMessage ?? "Nombre de usuario o password incorrectos");
-                    }
+
                 }
                 else
                 {
@@ -65,19 +62,75 @@ namespace ProyectommstoreConsumido.Controllers
         }
 
 
-            
         public ActionResult Logout()
         {
             Session.Clear();
             FormsAuthentication.SignOut();
             return RedirectToAction("LOGIN", "Login");
         }
+
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Register(RegistroViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var cliente = new HttpClient())
+                {
+                    // Definir la URL dentro del método
+                    string url = "https://localhost:44380/api/usuario";
+
+                    // Crear el objeto anónimo para enviar a la API
+                    var registroDtoApi = new RegistroDTOApi
+                    {
+                        NombreUsuario = model.NombreUsuario,
+                        Contraseña = model.Contraseña,
+                        Email = model.Email,
+
+                    };
+
+                    // Serializar el objeto a JSON
+                    var json = JsonConvert.SerializeObject(registroDtoApi);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    // Hacer la petición POST a la API
+                    var respuesta = await cliente.PostAsync(url, content);
+
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+                        ViewBag.Mensaje = "Usuario registrado correctamente.";
+                        return RedirectToAction("LOGIN");
+
+                    }
+                    else
+                    {
+                        // La API respondió con un error
+                        var errorContent = await respuesta.Content.ReadAsStringAsync();
+                        ModelState.AddModelError("", $"Error al registrar: {errorContent}");
+                        return View(model);
+
+
+                    }
+                }
+
+            }
+            return View(model);
+        }
+
+
+
+
     }
 
-    
-   
-
 }
+
+
+
 
 
 

@@ -52,7 +52,7 @@ namespace ProyectommstoreConsumido.Controllers
 
         [HttpPost]
 
-        public ActionResult PRODUCTO_INSERTADO(Productos producto)
+        public async  Task<ActionResult> PRODUCTO_INSERTADO(Productos producto)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace ProyectommstoreConsumido.Controllers
                 HttpClient client = new HttpClient();
                 string jsonProducto = JsonConvert.SerializeObject(producto);
                 var content = new StringContent(jsonProducto, System.Text.Encoding.UTF8, "application/json");
-                var respuesta = client.PostAsync(url, content).Result;
+                var respuesta = await client.PostAsync(url, content);
 
                 if (respuesta.IsSuccessStatusCode)
                 {
@@ -74,7 +74,7 @@ namespace ProyectommstoreConsumido.Controllers
 
                 }
             }
-            return View("_crearProductoModal", producto);
+            return View("_CrearProductoModal", producto);
         }
 
 
@@ -111,8 +111,9 @@ namespace ProyectommstoreConsumido.Controllers
             }
             return RedirectToAction("PRODUCTO_LISTADO");
         }
+        
         [HttpGet]
-        public ActionResult MostrarDetallesProducto(int id)
+        public  async Task<ActionResult> MostrarDetallesProducto(int id)
         {
             Productos producto = null;
             string url = $"https://localhost:44380/api/pro/{id}";
@@ -120,7 +121,7 @@ namespace ProyectommstoreConsumido.Controllers
             var respuesta = client.GetAsync(url).Result;
             if (respuesta.IsSuccessStatusCode)
             {
-                var contenido = respuesta.Content.ReadAsStringAsync().Result;
+                var contenido = await respuesta.Content.ReadAsStringAsync();
                 producto = JsonConvert.DeserializeObject<Productos>(contenido);
                 Debug.WriteLine(contenido);
             }

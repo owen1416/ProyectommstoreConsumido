@@ -15,7 +15,7 @@ namespace ProyectommstoreConsumido.Models
         // Propiedades adicionales para la respuesta de la API de login
         public bool IsAuthenticated { get; set; }
         public string Token { get; set; }
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; }        
 
 
         public Usuarios()
