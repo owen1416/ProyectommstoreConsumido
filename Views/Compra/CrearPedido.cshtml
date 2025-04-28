@@ -1,0 +1,280 @@
+﻿@model ProyectommstoreConsumido.Models.PedidoViewModel
+
+@{
+    ViewBag.Title = "Crear Pedido";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asumiendo que tienes un layout principal
+}
+
+<style>
+    /* Estilos Generales (Base) */
+    body {
+        font-family: sans-serif;
+        background-color: #f4f6f9;
+        padding: 20px;
+        margin-top: 0;
+    }
+
+    .content-wrapper {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+    }
+
+    .content-header h1 {
+        color: #333;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #673ab7;
+        padding-bottom: 10px;
+        font-size: 1.8em; /* Tamaño del título principal igual que en las listas */
+    }
+
+    .box {
+        background-color: #fff;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .box-header {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        color: #333;
+        background-color: #ffffff;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .box-title {
+        font-size: 1.1em; /* Tamaño del título del box */
+        font-weight: bold;
+        color: #333;
+    }
+
+    .box-body {
+        padding: 12px;
+    }
+
+    .box-footer {
+        padding: 12px;
+        background-color: #f5f5f5;
+        border-top: 1px solid #eee;
+        border-radius: 0 0 5px 5px;
+        text-align: right;
+    }
+
+    /* Estilos del Formulario */
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .control-label {
+        font-weight: bold;
+        color: #555;
+        font-size: 0.9em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 0.9em;
+    }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 0.8em;
+    }
+
+    /* Estilos de los Botones */
+    .btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background-color 0.3s ease;
+        margin-left: 5px;
+    }
+
+    .btn-primary {
+        background-color: #4b0081;
+    }
+
+    .btn-secondary {
+        background-color: #fb1d1d;
+    }
+
+    .btn-success {
+        background-color: #4b0081;
+    }
+
+    .btn-default {
+        background-color: #ff3737;
+        color: #ffffff;
+        border: 1px solid #ced4da;
+    }
+
+    .pull-right {
+        float: right;
+    }
+
+    /* Estilos de la Tabla */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+        font-size: 0.9em;
+    }
+
+        .table th, .table td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #4b0081;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+    /* Estilo específico para el encabezado principal (h1) */
+    h1 {
+        /* Los estilos ya están definidos en .content-header h1 */
+    }
+
+    /* Los encabezados h3 (Detalles del Cliente y Agregar Productos) */
+    h3.box-title {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* Encabezado Productos en el Pedido */
+    h4 {
+        font-size: 1em;
+        margin-top: 10px;
+        margin-bottom: 8px;
+    }
+</style>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Crear Nuevo Pedido
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Detalles del Cliente</h3>
+                    </div>
+                    @using (Html.BeginForm("CrearPedido", "Compra", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="box-body">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ClienteId, new { @class = "col-sm-2 control-label" })
+                                <div class="col-sm-10">
+                                    @Html.TextBoxFor(m => m.ClienteId, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.ClienteId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Agregar Productos al Pedido</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="nuevoProductoId">Producto ID</label>
+                                    <input type="number" class="form-control" id="nuevoProductoId" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="nuevaCantidad">Cantidad</label>
+                                    <input type="number" class="form-control" id="nuevaCantidad" value="1" min="1" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <button type="button" id="agregarATabla" class="btn btn-success">Agregar a Tabla</button>
+                                </div>
+                            </div>
+
+                            <h4>Productos en el Pedido</h4>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Producto ID</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaPedidoItems">
+                                </tbody>
+                            </table>
+
+                            <div id="itemsCompra" style="display:none;">
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            @Html.ActionLink("Volver", "Index", "Home", new { @class = "btn btn-default" })
+                            <button type="submit" class="btn btn-primary pull-right">Generar Compra</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script>
+        const agregarATablaBtn = document.getElementById("agregarATabla");
+        const tablaPedidoItemsBody = document.getElementById("tablaPedidoItems");
+        const itemsCompraContainer = document.getElementById("itemsCompra");
+        let index = 0;
+
+        agregarATablaBtn.addEventListener("click", function () {
+            const productoIdInput = document.getElementById("nuevoProductoId");
+            const cantidadInput = document.getElementById("nuevaCantidad");
+            const productoId = productoIdInput.value;
+            const cantidad = cantidadInput.value;
+
+            if (productoId && cantidad && !isNaN(productoId) && !isNaN(cantidad) && parseInt(cantidad) > 0) {
+                const newRow = tablaPedidoItemsBody.insertRow();
+                const cellId = newRow.insertCell();
+                const cellCantidad = newRow.insertCell();
+                cellId.textContent = productoId;
+                cellCantidad.textContent = cantidad;
+
+                const productoIdHidden = document.createElement("input");
+                productoIdHidden.type = "hidden";
+                productoIdHidden.name = `ItemsCompra[${index}].ProductoId`;
+                productoIdHidden.value = productoId;
+                itemsCompraContainer.appendChild(productoIdHidden);
+
+                const cantidadHidden = document.createElement("input");
+                cantidadHidden.type = "hidden";
+                cantidadHidden.name = `ItemsCompra[${index}].Cantidad`;
+                cantidadHidden.value = cantidad;
+                itemsCompraContainer.appendChild(cantidadHidden);
+
+                index++;
+
+                productoIdInput.value = "";
+                cantidadInput.value = "1";
+            } else {
+                alert("Por favor, ingrese un ID de producto y una cantidad válida.");
+            }
+        });
+    </script>
+}

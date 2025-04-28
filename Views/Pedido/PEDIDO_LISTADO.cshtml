@@ -1,0 +1,123 @@
+﻿@model IEnumerable<ProyectommstoreConsumido.Models.Pedidos>
+
+@{
+    ViewBag.Title = "Listado de Pedidos";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>Listado de Pedidos</h1>
+    </section>
+    <section class="content">
+        <div class="box">
+            @* Eliminamos el box-header que decía "Pedidos" *@
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>PedidoID</th>
+                                <th>ClienteID</th>
+                                <th>Fecha Pedido</th>
+                                <th>Estado</th>
+                                <th>Total</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.PedidoID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ClienteID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FechaPedido)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Estado)</td>
+                                    <td>S/. @Html.DisplayFor(modelItem => item.Total)</td>
+                                    <td class="text-center" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                        <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-producto-id="@item.PedidoID"><i class="bi bi-eye me-2"></i></button>
+
+                                        @using (Html.BeginForm("PRODUCTO_ELIMINADO", "Producto", new { id = item.PedidoID }, FormMethod.Post, new { @class = "formEliminarProducto" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill btnEliminarProducto" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">
+                                                <i class="bi bi-trash-fill me-1"></i>
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    /* Incluimos aquí los estilos relevantes de tu archivo CSS */
+    body {
+        font-family: sans-serif;
+        background-color: #f4f6f9;
+        padding: 20px;
+    }
+
+    .content-wrapper {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .content-header h1 {
+        color: #333;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #673ab7;
+        padding-bottom: 10px;
+    }
+
+    .box {
+        background-color: #fff;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .box-body {
+        padding: 15px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border: 1px solid #ddd;
+    }
+
+        .table th, .table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #4b0081; /* Usando tu color morado */
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+    h1 { /* Aplicando el estilo del h1 de tu referencia al h1 del header */
+        color: #333;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #673ab7;
+        padding-bottom: 10px;
+    }
+
+    /* Ya no necesitamos el estilo para h3.box-title */
+</style>

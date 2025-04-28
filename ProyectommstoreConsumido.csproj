@@ -147,15 +147,21 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
+    <Compile Include="Controllers\CompraController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Clientes.cs" />
+    <Compile Include="Models\DatosPedido.cs" />
+    <Compile Include="Models\ItemCompraViewModel.cs" />
+    <Compile Include="Models\Pedidos.cs" />
     <Compile Include="Models\Productos.cs" />
+    <Compile Include="Models\PedidoViewModel.cs" />
     <Compile Include="Models\RegistroDTOApi.cs" />
     <Compile Include="Models\RegistroViewModel.cs" />
     <Compile Include="Models\Usuarios.cs" />
@@ -221,6 +227,8 @@
     <Content Include="Views\Cliente\CLIENTE_LISTADO.cshtml" />
     <Content Include="Views\Cliente\_CrearClienteModal.cshtml" />
     <Content Include="Views\Cliente\_DetallesClientesPartial.cshtml" />
+    <Content Include="Views\Compra\CrearPedido.cshtml" />
+    <Content Include="Views\Pedido\PEDIDO_LISTADO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

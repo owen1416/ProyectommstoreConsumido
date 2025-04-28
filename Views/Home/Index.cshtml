@@ -7,12 +7,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
-            overflow-y: hidden; /* Oculta la barra de desplazamiento vertical */
+            font-family: sans-serif;
+            background-color: #f4f6f9; /* Fondo claro para la página */
+            padding: 20px;
+            overflow-y: auto;
         }
 
-        #main-content {
-            margin-left: auto;
-            margin-right: auto;
+        .content-wrapper {
+            background-color: #fff; /* Fondo blanco para el "recuadro" principal */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #673ab7;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .card {
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px; /* Añadimos un poco de margen inferior entre las tarjetas */
         }
 
         .card-body {
@@ -21,110 +40,123 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 15px;
         }
 
         .card-title {
             text-align: center;
+            margin-bottom: 10px;
+            color: white; /* El título de la tarjeta será blanco */
         }
 
         .card-text {
             text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white; /* El número también será blanco */
         }
 
         .fs-1 {
-            font-size: 3rem !important;
+            font-size: 2.5rem !important;
+            margin-bottom: 10px;
+            color: white; /* Los iconos también serán blancos */
         }
+
+        hr {
+            width: 50%;
+            border-top: 2px solid white;
+            opacity: 0.8;
+            margin: 15px 0;
+        }
+
+        .btn-info-link {
+            color: #007bff;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+            .btn-info-link:hover {
+                text-decoration: underline;
+            }
     </style>
 </head>
 
 <body>
-    <div id="wrapper">
-        <div id="main-content" class="container">
-            <h1 class="display-4 text-center">Panel de Inicio</h1>
-            <p class="lead text-center">Bienvenido al sistema de inventario de periféricos.</p>
-
-            <div class="pt-4">
-                <div class="row justify-content-center">
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-white h-100 shadow rounded-4" style="background-color:#6f42c1;">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                <h5 class="card-title mb-2 text-center">Usuarios</h5>
-                                <i class="fas fa-users fs-1 mb-2"></i>
-                                <p class="card-text fs-3 fw-bold text-center">@ViewBag.TotalUsuarios</p>
-                                <hr style="width: 50%; border-top: 2px solid white; opacity: 0.8;">
-                                <a href="@Url.Action("USUARIO_LISTADO", "Usuario")" style="color: white; text-decoration: none; margin-top: 10px;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
-                            </div>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Panel de Inicio</h1>
+        </section>
+        <section class="content">
+            <div class="row justify-content-center">
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow rounded-4" style="background-color:#6f42c1;">
+                        <div class="card-body">
+                            <h5 class="card-title">Usuarios</h5>
+                            <i class="fas fa-users fs-1"></i>
+                            <p class="card-text">@ViewBag.TotalUsuarios</p>
+                            <hr>
+                            <a href="@Url.Action("USUARIO_LISTADO", "Usuario")" class="btn-info-link" style="color: white;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-white h-100 shadow rounded-4" style="background-color:#e83e8c;">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                <h5 class="card-title mb-2 text-center">Productos</h5>
-                                <i class="bi bi-boxes fs-1 mb-2"></i>
-                                <p class="card-text fs-3 fw-bold text-center">@ViewBag.TotalProductos</p>
-                                <hr style="width: 50%; border-top: 2px solid white; opacity: 0.8;">
-                                <a href="@Url.Action("PRODUCTO_LISTADO", "Producto")" style="color: white; text-decoration: none; margin-top: 10px;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
-                            </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow rounded-4" style="background-color:#e83e8c;">
+                        <div class="card-body">
+                            <h5 class="card-title">Productos</h5>
+                            <i class="bi bi-boxes fs-1"></i>
+                            <p class="card-text">@ViewBag.TotalProductos</p>
+                            <hr>
+                            <a href="@Url.Action("PRODUCTO_LISTADO", "Producto")" class="btn-info-link" style="color: white;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-white h-100 shadow rounded-4" style="background-color:#28a745;">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                <h5 class="card-title mb-2 text-center">Stock</h5>
-                                @if (@ViewBag.totalstock <= 300)
-                                {
-                                    <span><i class="bi bi-exclamation-triangle fs-1 mb-2"></i></span>
-                                }
-                                else
-                                {
-                                    <span><i class="bi bi-check-circle-fill fs-1 mb-2 text-success"></i></span>
-                                }
-                                <p class="card-text fs-3 fw-bold text-center">@ViewBag.totalstock </p>
-                                <hr style="width: 50%; border-top: 2px solid white; opacity: 0.8;">
-                                <a href="#" style="color: white; text-decoration: none; margin-top: 10px;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
-                            </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow rounded-4" style="background-color:#28a745;">
+                        <div class="card-body">
+                            <h5 class="card-title">Stock</h5>
+                            @if (@ViewBag.totalstock <= 300)
+                            {
+                                <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-check-circle-fill fs-1 text-success"></i>
+                            }
+                            <p class="card-text">@ViewBag.totalstock </p>
+                            <hr>
+                            <a href="#" class="btn-info-link" style="color: white;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-white h-100 shadow rounded-4" style="background-color:#ffc107;">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                <h5 class="card-title mb-2 text-center">Categorías</h5>
-                                <i class="bi bi-tag fs-1 mb-2"></i>
-                                <p class="card-text fs-3 fw-bold text-center">@ViewBag.totalCategorias </p>
-                                <hr style="width: 50%; border-top: 2px solid white; opacity: 0.8;">
-                                <a href="#" style="color: white; text-decoration: none; margin-top: 10px;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
-                            </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow rounded-4" style="background-color:#007bff;">
+                        <div class="card-body">
+                            <h5 class="card-title">Clientes</h5>
+                            <i class="bi bi-person-fill fs-1"></i>
+                            <p class="card-text">@ViewBag.totalClientes</p>
+                            <hr>
+                            <a href="@Url.Action("CLIENTE_LISTADO", "Cliente")" class="btn-info-link" style="color: white;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-white h-100 shadow rounded-4" style="background-color:#007bff;">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                <h5 class="card-title mb-2 text-center">Clientes</h5>
-                                <i class="bi bi-person-fill fs-1 mb-2"></i>
-                                <p class="card-text fs-3 fw-bold text-center">@ViewBag.totalClientes</p>
-                                <hr style="width: 50%; border-top: 2px solid white; opacity: 0.8;">
-                                <a href="@Url.Action("CLIENTE_LISTADO", "Cliente")" style="color: white; text-decoration: none; margin-top: 10px;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-white h-100 shadow rounded-4" style="background-color:#17a2b8;">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                <h5 class="card-title mb-2 text-center">Ventas</h5>
-                                <i class="bi bi-cart-fill fs-1 mb-2"></i>
-                                <p class="card-text fs-3 fw-bold text-center">@ViewBag.totalVentas </p>
-                                <hr style="width: 50%; border-top: 2px solid white; opacity: 0.8;">
-                                <a href="" style="color: white; text-decoration: none; margin-top: 10px;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
-                            </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow rounded-4" style="background-color:#17a2b8;">
+                        <div class="card-body">
+                            <h5 class="card-title">Ventas</h5>
+                            <i class="bi bi-cart-fill fs-1"></i>
+                            <p class="card-text">@ViewBag.totalVentas </p>
+                            <hr>
+                            <a href="" class="btn-info-link" style="color: white;">Más Info <i class="bi bi-arrow-right-circle-fill"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </body>

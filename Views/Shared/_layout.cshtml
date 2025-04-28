@@ -124,20 +124,18 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#productosMenu"><i class="bi bi-wrench"></i> Mantenimiento</a>
                     <div class="collapse" id="productosMenu">
                         <a class="nav-link ms-4" href="@Url.Action("PRODUCTO_LISTADO", "Producto")"><i class="bi bi-layers"></i>Productos</a>
-                        <a class="nav-link ms-4" href="@Url.Action("USUARIO_LISTADO", "Usuario")"><i class="bi bi-person-fill"></i>Usuarios</a>
+                        <a class="nav-link ms-4" href="@Url.Action("USUARIO_LISTADO", "Usuario")"><i class="bi bi-person-lock"></i>Usuarios</a>
                         <a class="nav-link ms-4" href="@Url.Action("CLIENTE_LISTADO", "Cliente")"><i class="bi bi-people"></i>Clientes</a>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#stockMenu"><i class="bi bi-boxes"></i> Stock</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#stockMenu"><i class="bi bi-cash-stack"></i> Ventas</a>
                     <div class="collapse" id="stockMenu">
-                        <a class="nav-link ms-4" href="#">Ver</a>
-                        <a class="nav-link ms-4" href="#">Entrada</a>
-                        <a class="nav-link ms-4" href="#">Salida</a>
+                        <a class="nav-link ms-4" href="@Url.Action("PEDIDO_LISTADO", "Pedido")">Pedidos</a>
+                        <a class="nav-link ms-4" href="#">Detalles</a
                     </div>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cash-stack"></i> Ventas</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bar-chart-line"></i> Reportes</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("CrearPedido", "Compra")"><i class="bi bi-cart3"></i>Generar Venta</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Configuración</a></li>
                 <li class="nav-item">
                     <a href="#" class="nav-link cerrar-sesion-link btn btn-warning d-inline-flex align-items-center">
@@ -224,10 +222,6 @@
         });
     </script>
 
-   
-
- 
- 
 
 </body>
 </html>
