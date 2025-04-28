@@ -1,77 +1,68 @@
-﻿@model ProyectommstoreConsumido.Models.Productos
+﻿@model ProyectommstoreConsumido.Models.Clientes
 
-<div class="modal fade custom-modal" id="crearProductoModal" tabindex="-1" role="dialog" aria-labelledby="crearProductoModalLabel" aria-hidden="true">
+<div class="modal fade custom-modal" id="crearClienteModal" tabindex="-1" role="dialog" aria-labelledby="crearClienteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content custom-modal-content">
             <div class="modal-header custom-modal-header">
-                <h5 class="modal-title" id="crearProductoModalLabel"><i class="bi bi-plus-circle-fill me-2"></i> Registrar Nuevo Producto</h5>
-                
+                <h5 class="modal-title" id="crearClienteModalLabel"><i class="bi bi-person-plus-fill me-2"></i> Registrar Nuevo Cliente</h5>
             </div>
             <div class="modal-body custom-modal-body">
-                @using (Html.BeginForm("PRODUCTO_INSERTADO", "Producto", FormMethod.Post, new { id = "  " }))
+                @using (Html.BeginForm("CLIENTE_INSERTADO", "Cliente", FormMethod.Post, new { id = "crearClienteForm" }))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-
-
                     <div class="mb-2">
-                        <label for="Nombre" class="form-label"><i class="bi bi-tag-fill me-2"></i> Nombre</label>
+                        <label for="Nombre" class="form-label"><i class="bi bi-person-fill me-2"></i> Nombre</label>
                         @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Nombre" } })
                         @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="mb-2">
-                        <label for="Marca" class="form-label"><i class="bi bi-bookmark-fill me-2"></i> Marca</label>
-                        @Html.EditorFor(model => model.Marca, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Marca" } })
-                        @Html.ValidationMessageFor(model => model.Marca, "", new { @class = "text-danger" })
+                        <label for="Apellido" class="form-label"><i class="bi bi-person-fill me-2"></i> Apellido</label>
+                        @Html.EditorFor(model => model.Apellido, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Apellido" } })
+                        @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="mb-2">
-                        <label for="Modelo" class="form-label"><i class="bi bi-layers-fill me-2"></i> Modelo</label>
-                        @Html.EditorFor(model => model.Modelo, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Modelo" } })
-                        @Html.ValidationMessageFor(model => model.Modelo, "", new { @class = "text-danger" })
+                        <label for="Email" class="form-label"><i class="bi bi-envelope-fill me-2"></i> Email</label>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", type = "email", placeholder = "Email" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="mb-2">
-                        <label for="Descripcion" class="form-label"><i class="bi bi-file-text-fill me-2"></i> Descripción</label>
-                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", rows = "2", placeholder = "Descripción" } })
-                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                        <label for="Telefono" class="form-label"><i class="bi bi-telephone-fill me-2"></i> Teléfono</label>
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", placeholder = "Teléfono" } })
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="mb-2">
-                        <label for="Precio" class="form-label"><i class="bi bi-cash-coin me-2"></i> Precio</label>
-                        @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", type = "number", step = "0.01", placeholder = "Precio" } })
-                        @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+                        <label for="NrDocumento" class="form-label"><i class="bi bi-card-text-fill me-2"></i> Nro. Documento</label>
+                        @Html.EditorFor(model => model.NrDocumento, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", type = "number", placeholder = "Nro. Documento" } })
+                        @Html.ValidationMessageFor(model => model.NrDocumento, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="mb-2">
-                        <label for="Stock" class="form-label"><i class="bi bi-box-seam-fill me-2"></i> Stock</label>
-                        @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", type = "number", min = "0", placeholder = "Stock" } })
-                        @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="mb-2">
-                        <label for="Categoria" class="form-label"><i class="bi bi-folder-fill me-2"></i> Categoría</label>
-                        @Html.DropDownList("Categoria", new SelectList(new List<object>()
+                        <label for="Documento" class="form-label"><i class="bi bi-file-earmark-text-fill me-2"></i> Tipo Documento</label>
+                        @Html.DropDownList("Documento", new SelectList(new List<string>()
                         {
-                            new { Value = "TEC", Text = "Teclados" },
-                            new { Value = "RAT", Text = "Ratones" },
-                            new { Value = "MON", Text = "Monitores" },  
-                            new { Value = "IMP", Text = "Impresoras" }
-                        }, "Value", "Text"), "Seleccionar Categoría", new { @class = "form-select rounded-pill form-select-sm" })
-                        @Html.ValidationMessageFor(model => model.Categoria, "", new { @class = "text-danger" })
+                            "DNI",
+                            "Pasaporte",
+                            "Carnet de Extranjería"
+                        }), "Seleccionar Documento", new { @class = "form-select rounded-pill form-select-sm" })
+                        @Html.ValidationMessageFor(model => model.Documento, "", new { @class = "text-danger" })
                     </div>
+
                     <div class="modal-footer custom-modal-footer d-flex justify-content-center gap-3">
                         <button type="submit" class="btn btn-primary rounded-pill btn-lg"><i class="bi bi-save-fill me-2"></i> Registrar</button>
                         <button type="button" data-bs-dismiss="modal" aria-label="Cerrar" class="btn btn-danger rounded-pill btn-lg"><i class="bi bi-x-circle-fill me-2"></i> Cancelar</button>
                     </div>
                 }
             </div>
-            
         </div>
     </div>
 </div>
+
 
 <style>
     /* Diseño Minimalista con Énfasis Primario */
@@ -142,7 +133,6 @@
         .custom-modal-footer .btn-primary {
             background-color: #4b0081;
             border-color: #4b0081;
-            
         }
 
             .custom-modal-footer .btn-primary:hover {
@@ -195,4 +185,4 @@
         font-size: 0.95rem;
         border-radius: 6px;
     }
-    </style>
+</style>

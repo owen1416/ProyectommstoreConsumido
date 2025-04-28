@@ -1,0 +1,22 @@
+﻿
+
+@if (Model != null)
+{
+    <div class="card shadow-sm p-3 mb-3 bg-light rounded">
+        <h5 class="card-title text-primary">Detalles del Usuario</h5>
+        <div class="card-body">
+            <p class="card-text"><strong>Nombre:</strong> @Model.NombreUsuario</p>
+            <p class="card-text"><strong>Contraseña:</strong> @Model.password</p>
+            <p class="card-text"><strong>Email:</strong> @Model.Email</p>
+           
+      
+            <button type="button" class="btn btn-sm btn-outline-danger y mt-2" onclick="$('#detallesUsuario').empty();">Cerrar Detalles</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        No se encontraron detalles para este Usuario.
+    </div>
+}

@@ -4,16 +4,21 @@
     ViewBag.Title = "USUARIO_LISTADO";
 }
 
+
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<h2 class="mb-4 text-black">Listado de Usuarios</h2>
+<h2 class="mb-4 text-black">Mantenimiento de Usuarios</h2>
+
+<div id="detallesUsuario">
+</div>
 
 <div class="d-flex justify-content-end mb-3">
-    <button id="btnNuevoUsuario" class="btn btn-primary rounded-pill btn-sm"><i class="bi bi-plus-circle-fill me-2"></i> Nuevo Usuario</button>
+    <button id="btnNuevoUsuario" class="btn  rounded-pill btn-sm" style=" background-color: #4b0081; color: #e9ecef; border-collapse: collapse;"><i class="bi bi-plus-circle-fill me-2"></i> Nuevo Usuario</button>
 </div>
 
 
 <div class="table-responsive">
-    <table class="table table-hover rounded-top rounded-bottom shadow-sm" style="background-color: #fff; color: #495057; border-collapse: collapse;">
+    <table class="table table-hover rounded-top rounded-bottom shadow-sm" style="border-collapse: collapse;">
         <thead class="bg-secondary">
             <tr>
                 <th scope="col" style="padding: 0.75rem; font-size: 0.9rem; font-weight: 500; border-bottom: 2px solid #545b62;">@Html.DisplayNameFor(model => model.UsuarioID)</th>
@@ -32,8 +37,8 @@
                     <td style="padding: 0.6rem; font-size: 0.85rem; border-bottom: 1px solid #e9ecef;">@Html.DisplayFor(modelItem => item.password)</td>
                     <td style="padding: 0.6rem; font-size: 0.85rem; border-bottom: 1px solid #e9ecef;">@Html.DisplayFor(modelItem => item.Email)</td>
                     <td class="text-center" style="padding: 0.6rem; font-size: 0.85rem; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; justify-content: center;">
+                        <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-usuario-id="@item.UsuarioID"><i class="bi bi-eye me-2"></i></button>
                         @Html.ActionLink("Editar", "Edit", new { id = item.UsuarioID }, new { @class = "btn btn-sm btn-outline-primary rounded-pill me-1", style = "font-size: 0.75rem;" })
-                        @Html.ActionLink("Detalles", "Details", new { id = item.UsuarioID }, new { @class = "btn btn-sm btn-outline-info rounded-pill me-1", style = "font-size: 0.75rem;" })
                         @using (Html.BeginForm("USUARIO_ELIMINADO", "Usuario", new { id = item.UsuarioID }, FormMethod.Post, new { @class = "formEliminarUsuario" }))
                         {
                             @Html.AntiForgeryToken()
@@ -50,7 +55,7 @@
 
 <style>
     .table-responsive {
-        border: 1px solid #ced4da;
+        border: 1px solid #ced4da; /* color del borde de la tabla */
         border-radius: 0.5rem;
         overflow: auto;
     }
@@ -61,11 +66,11 @@
     }
 
     thead.bg-secondary th {
-        background-color: #007bff; /* Fondo azul del encabezado de productos */
+        background-color: #4b0081; /* Fondo azul del encabezado de productos */
         color: white;
         font-weight: 500;
         text-align: left;
-        border-bottom: 2px solid #0056b3;
+        border-bottom: 2px solid #4b0070;
     }
 
     tbody td {
@@ -83,12 +88,13 @@
     }
 
     .btn-outline-primary {
-        color: #007bff;
-        border-color: #007bff;
+        color: #4b0081;
+        border-color: #4b0081;
     }
 
         .btn-outline-primary:hover {
-            background-color: #007bff;
+            background-color: #4b0070;
+            border-color: #4b0070;
             color: white;
         }
 
@@ -135,5 +141,59 @@
             }
         });
 
+    </script>
+
+    <script>
+        //js para mensaje de boton eliminar
+        document.addEventListener("DOMContentLoaded", function () {
+            const botonesEliminar = document.querySelectorAll(".btnEliminarUsuario");
+
+            botonesEliminar.forEach(boton => {
+                boton.addEventListener("click", function () {
+                    const formulario = this.closest("form");
+
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "Este usuario será eliminado permanentemente.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            formulario.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script>
+     
+         //js para detalles
+        $(document).ready(function () {
+            console.log("El script de detalles se está ejecutando."); // Verifica si el script se carga
+
+            $(".btnVerDetalles").click(function () {
+                console.log("Se hizo clic en el botón Detalles."); // Verifica si el evento de clic se dispara
+                var UsuarioID = $(this).data("usuario-id");
+                console.log("ID del usuario:", UsuarioID); // Verifica si se obtiene el ID correctamente
+                $.ajax({
+                    url: '@Url.Action("MostrarDetallesUsuario", "Usuario")',
+                    type: 'GET',
+                    data: { id: UsuarioID },
+                    success: function (data) {
+                        $("#detallesUsuario").html(data);
+                    },
+                    error: function (error) {
+                        console.error("Error al cargar los detalles:", error);
+                        $("#detallesUsuario").html("<p>Error al cargar los detalles del producto.</p>");
+                    }
+                });
+            });
+        });
     </script>
 }

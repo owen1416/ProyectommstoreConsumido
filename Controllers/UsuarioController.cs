@@ -94,5 +94,66 @@ namespace ProyectommstoreConsumido.Controllers
             return PartialView("_CrearUsuarioModal", model);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> USUARIO_ELIMINADO(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                string url = $"https://localhost:44380/api/usuario/{id}";
+                HttpClient client = new HttpClient();
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
+
+                try
+                {
+                    HttpResponseMessage respuesta = await client.SendAsync(request);
+
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+                        TempData["MensajeEliminacion"] = "El producto se eliminó correctamente.";
+                        TempData["Tipo"] = "success";
+                    }
+                    else
+                    {
+                        TempData["Mensaje"] = "No se pudo eliminar el producto";
+                        TempData["Tipo"] = "error";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Excepción al llamar a la API de eliminación: {ex.Message}");
+                    TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar el producto.";
+                }
+            }
+            return RedirectToAction("USUARIO_LISTADO");
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> MostrarDetallesUsuario(int id)
+        {
+            Usuarios usuarios = null;
+            string url = $"https://localhost:44380/api/usuario/{id}";
+            HttpClient client = new HttpClient();
+            var respuesta = client.GetAsync(url).Result;
+            if (respuesta.IsSuccessStatusCode)
+            {
+                var contenido = await respuesta.Content.ReadAsStringAsync();
+                usuarios = JsonConvert.DeserializeObject<Usuarios>(contenido);
+                Debug.WriteLine(contenido);
+            }
+            else
+            {
+                Debug.WriteLine("Error al obtener detalles del producto.");
+                usuarios = new Usuarios();
+            }
+
+            // Asumiendo que solo esperas un producto, toma el primero de la lista
+            return PartialView("_DetallesUsuarioPartial", usuarios);
+        }
+
+
+
+
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ProyectommstoreConsumido.Models;
 using System;
 using System.Collections.Generic;
@@ -9,32 +8,30 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Razor.Generator;
 
 namespace ProyectommstoreConsumido.Controllers
 {
-    public class ProductoController : Controller
+    public class ClienteController : Controller
     {
-        // GET: Producto
 
         [HttpGet]
-        public ActionResult PRODUCTO_LISTADO()
+        public ActionResult CLIENTE_LISTADO()
         {
-            List<Productos> lista = null;
-            string url = "https://localhost:44380/api/pro/getall";
+            List<Clientes> lista = null;
+            string url = "https://localhost:44380/api/cliente/getall";
             HttpClient client = new HttpClient();
             var respuesta = client.GetAsync(url).Result;
             if (respuesta.IsSuccessStatusCode)
             {
                 var contenido = respuesta.Content.ReadAsStringAsync().Result;
-                lista = JsonConvert.DeserializeObject<List<Productos>>(contenido);
+                lista = JsonConvert.DeserializeObject<List<Clientes>>(contenido);
                 Debug.WriteLine(contenido);
 
             }
             else
             {
                 Debug.WriteLine("Error.......");
-                lista = new List<Productos>();
+                lista = new List<Clientes>();
 
             }
 
@@ -42,7 +39,7 @@ namespace ProyectommstoreConsumido.Controllers
         }
 
         [HttpGet]
-        public ActionResult PRODUCTO_INSERTADO()
+        public ActionResult CLIENTE_INSERTADO()
         {
             return View();
         }
@@ -50,21 +47,21 @@ namespace ProyectommstoreConsumido.Controllers
 
         [HttpPost]
 
-        public async  Task<ActionResult> PRODUCTO_INSERTADO(Productos producto)
+        public async Task<ActionResult> CLIENTE_INSERTADO(Clientes ciente)
         {
             if (ModelState.IsValid)
             {
-              
-                
-                string url = "https://localhost:44380/api/pro";
+
+
+                string url = "https://localhost:44380/api/cliente";
                 HttpClient client = new HttpClient();
-                string jsonProducto = JsonConvert.SerializeObject(producto);
-                var content = new StringContent(jsonProducto, System.Text.Encoding.UTF8, "application/json");
+                string jsonCliente = JsonConvert.SerializeObject(ciente);
+                var content = new StringContent(jsonCliente, System.Text.Encoding.UTF8, "application/json");
                 var respuesta = await client.PostAsync(url, content);
 
                 if (respuesta.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("PRODUCTO_LISTADO");
+                    return RedirectToAction("CLIENTE_LISTADO");
                 }
                 else
                 {
@@ -75,17 +72,18 @@ namespace ProyectommstoreConsumido.Controllers
                 }
             }
 
-            
-            return View("_CrearProductoModal", producto);
+
+            return View("_CrearClienteModal", ciente);
         }
 
 
+
         [HttpPost] // Mantenemos HttpPost para el formulario
-        public async Task<ActionResult> PRODUCTO_ELIMINADO(int id)
+        public async Task<ActionResult> CLIENTE_ELIMINADO(int id)
         {
             if (ModelState.IsValid)
             {
-                string url = $"https://localhost:44380/api/pro/delete?id={id}";
+                string url = $"https://localhost:44380/api/cliente/{id}";
                 HttpClient client = new HttpClient();
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
@@ -111,55 +109,32 @@ namespace ProyectommstoreConsumido.Controllers
                     TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar el producto.";
                 }
             }
-            return RedirectToAction("PRODUCTO_LISTADO");
+            return RedirectToAction("CLIENTE_LISTADO");
         }
-        
+
+
         [HttpGet]
-        public  async Task<ActionResult> MostrarDetallesProducto(int id)
+        public async Task<ActionResult> MostrarDetallesCliente(int id)
         {
-            Productos producto = null;
-            string url = $"https://localhost:44380/api/pro/{id}";
+            Clientes clientes = null;
+            string url = $"https://localhost:44380/api/cliente/{id}";
             HttpClient client = new HttpClient();
             var respuesta = client.GetAsync(url).Result;
             if (respuesta.IsSuccessStatusCode)
             {
                 var contenido = await respuesta.Content.ReadAsStringAsync();
-                producto = JsonConvert.DeserializeObject<Productos>(contenido);
+                clientes = JsonConvert.DeserializeObject<Clientes>(contenido);
                 Debug.WriteLine(contenido);
             }
             else
             {
                 Debug.WriteLine("Error al obtener detalles del producto.");
-                producto = new Productos();
+                clientes = new Clientes();
             }
 
             // Asumiendo que solo esperas un producto, toma el primero de la lista
-            return PartialView("_DetallesProductoPartial", producto);
+            return PartialView("_DetallesClientesPartial", clientes);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
 }

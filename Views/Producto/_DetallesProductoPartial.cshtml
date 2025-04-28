@@ -8,10 +8,6 @@
             <p class="card-text"><strong>Nombre:</strong> @Model.Nombre</p>
             <p class="card-text"><strong>Marca:</strong> @Model.Marca</p>
             <p class="card-text"><strong>Modelo:</strong> @Model.Modelo</p>
-            @if (!string.IsNullOrEmpty(Model.Descripcion))
-            {
-                <p class="card-text"><strong>Descripción:</strong> @Model.Descripcion</p>
-            }
             <p class="card-text"><strong>Precio:</strong> @Model.Precio.ToString("C")</p>
             <p class="card-text"><strong>Stock:</strong> @Model.Stock</p>
             <p class="card-text"><strong>Categoría:</strong> @Model.Categoria</p>

@@ -1,5 +1,6 @@
 ﻿@model ProyectommstoreConsumido.Models.RegistroViewModel
 
+
 <div class="modal fade custom-modal" id="crearUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="crearUsuarioModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content custom-modal-content">
@@ -49,3 +50,125 @@
         </div>
     </div>
 </div>
+<style>
+    /* Diseño Minimalista con Énfasis Primario */
+    .custom-modal .modal-dialog {
+        max-width: 550px;
+        margin: 60px auto;
+    }
+
+    .custom-modal-content {
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        border: none;
+        background-color: #fff;
+        color: #495057;
+    }
+
+    .custom-modal-header {
+        background-color: #4b0081; /* Fondo azul primario */
+        color: #fff;
+        border-bottom: 3px solid #4b0070; /* Línea inferior más gruesa y oscura */
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .custom-modal-header .modal-title {
+            font-size: 1.05rem;
+            font-weight: 400;
+        }
+
+        .custom-modal-header .btn-close {
+            margin-left: 1rem;
+            padding: 0.25rem;
+            background: transparent url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' d='M1.5 1.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V1.5zM14 2.5a.5.5 0 0 0-.5-.5H2.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-11zm-9.646 2.354a.5.5 0 0 0-.708.708L7.293 8 4.646 10.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.646-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+            border: 0;
+            border-radius: 0.25rem;
+            opacity: 0.8;
+        }
+
+            .custom-modal-header .btn-close:hover {
+                opacity: 1;
+            }
+
+    .custom-modal-body {
+        padding: 1.75rem 2rem;
+        background-color: #fff;
+    }
+
+    .custom-modal-footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+        .custom-modal-footer .btn {
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+        }
+
+        .custom-modal-footer .btn-primary {
+            background-color: #4b0081;
+            border-color: #4b0081;
+        }
+
+            .custom-modal-footer .btn-primary:hover {
+                background-color: #4b0070;
+                border-color: #4b0070;
+                box-shadow: 0 3px 6px rgba(0, 86, 179, 0.2);
+            }
+
+        .custom-modal-footer .btn-danger {
+            background-color: #F44336; /* Un rojo claro */
+            border-color: #F44336;
+            box-shadow: 0 2px 4px rgba(255, 0, 0, 0.2); /* Misma sombra inicial que el azul */
+            color: white; /* Texto blanco para mejor contraste en rojo */
+        }
+
+            .custom-modal-footer .btn-danger:hover {
+                background-color: darkred; /* Un tono de rojo ligeramente más oscuro para el hover */
+                border-color: indianred;
+                box-shadow: 0 3px 6px rgba(255, 0, 0, 0.2); /* Misma animación de sombra que el azul */
+            }
+
+    /* Estilos para los elementos del formulario */
+    .form-label {
+        font-size: 0.85rem;
+        color: #343a40;
+        margin-bottom: 0.2rem;
+        font-weight: 500;
+    }
+
+    .form-control {
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        font-size: 0.9rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .text-danger {
+        font-size: 0.8rem;
+        color: #dc3545;
+        margin-top: 0.15rem;
+    }
+
+    .d-grid .btn-primary {
+        padding: 0.7rem 1.4rem;
+        font-size: 0.95rem;
+        border-radius: 6px;
+    }
+</style>

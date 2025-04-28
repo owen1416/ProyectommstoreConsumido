@@ -146,6 +146,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Clientes.cs" />
     <Compile Include="Models\Productos.cs" />
     <Compile Include="Models\RegistroDTOApi.cs" />
     <Compile Include="Models\RegistroViewModel.cs" />
@@ -215,6 +217,10 @@
     <Content Include="Views\Login\Register.cshtml" />
     <Content Include="Views\Usuario\USUARIO_LISTADO.cshtml" />
     <Content Include="Views\Usuario\_CrearUsuarioModal.cshtml" />
+    <Content Include="Views\Usuario\_DetallesUsuarioPartial.cshtml" />
+    <Content Include="Views\Cliente\CLIENTE_LISTADO.cshtml" />
+    <Content Include="Views\Cliente\_CrearClienteModal.cshtml" />
+    <Content Include="Views\Cliente\_DetallesClientesPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
