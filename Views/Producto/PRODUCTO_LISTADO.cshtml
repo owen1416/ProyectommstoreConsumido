@@ -1,6 +1,4 @@
-﻿
-
-@model IEnumerable<ProyectommstoreConsumido.Models.Productos>
+﻿@model ProyectommstoreConsumido.Models.ProductoListaViewModel
 
 @{
     ViewBag.Title = "Listado y Registro de Productos";
@@ -14,7 +12,6 @@
     </section>
     <section class="content">
         <div class="box">
-            @* El título principal ya está en el content-header, no necesitamos otro header en el box *@
             <div class="box-body">
                 <div class="d-flex justify-content-end mb-3">
                     <button id="btnNuevoProducto" class="btn  rounded-pill btn-sm" style="background-color: #4b0081; color: #e9ecef; border-collapse: collapse; ">  <i class="bi bi-plus-circle-fill me-2"></i> Nuevo Producto</button>
@@ -36,19 +33,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Productos)
                             {
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Marca)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Modelo)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                                    <td>S/. @Html.DisplayFor(modelItem => item.Precio)</td>
+                                    <td>$@Html.DisplayFor(modelItem => item.Precio)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Stock)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Categoria)</td>
                                     <td class="text-center" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                        <button type="button" class="btn btn-sm btn-outline-primary btnEditarProducto rounded-pill"
+                                                data-producto-id="@item.ProductoID"
+                                                data-nombre="@item.Nombre"
+                                                data-marca="@item.Marca"
+                                                data-modelo="@item.Modelo"
+                                                data-descripcion="@item.Descripcion"
+                                                data-precio="@item.Precio"
+                                                data-stock="@item.Stock"
+                                                data-categoria="@item.Categoria">
+                                            <i class="bi bi-pencil-fill me-2"></i>
+                                        </button>
                                         <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-producto-id="@item.ProductoID"><i class="bi bi-eye me-2"></i></button>
-                                        @Html.ActionLink("Editar", "Edit", new { id = item.ProductoID }, new { @class = "btn btn-sm btn-outline-primary rounded-pill me-1", style = "font-size: 0.75rem;" })
                                         @using (Html.BeginForm("PRODUCTO_ELIMINADO", "Producto", new { id = item.ProductoID }, FormMethod.Post, new { @class = "formEliminarProducto" }))
                                         {
                                             @Html.AntiForgeryToken()
@@ -61,6 +68,53 @@
                             }
                         </tbody>
                     </table>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            @if (Model.PaginaActual > 1)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("PRODUCTO_LISTADO", new { page = Model.PaginaActual - 1 })" class="page-link" aria-label="Previous">
+                                        <i class="bi bi-arrow-left-short"></i> 
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-label="Previous">
+                                        <i class="bi bi-arrow-left-short"></i> 
+                                    </span>
+                                </li>
+                            }
+
+                            @for (int i = Math.Max(1, Model.PaginaActual - 2); i <= Math.Min(Model.TotalPaginas, Model.PaginaActual + 2); i++)
+                            {
+                                <li class="page-item @(Model.PaginaActual == i ? "active" : "")">
+                                    <a href="@Url.Action("PRODUCTO_LISTADO", new { page = i })" class="page-link">@i</a>
+                                </li>
+                            }
+
+                            @if (Model.PaginaActual < Model.TotalPaginas)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("PRODUCTO_LISTADO", new { page = Model.PaginaActual + 1 })" class="page-link" aria-label="Next">
+                                         <i class="bi bi-arrow-right-short"></i>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-label="Next">
+                                         <i class="bi bi-arrow-right-short"></i>
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -131,16 +185,41 @@
     }
 
     /* Ya no necesitamos el estilo para h3.box-title */
+
+    /* Estilos para la paginación */
+    .pagination .page-item.active .page-link {
+        background-color: #4b0081; /* Color morado para la página activa */
+        border-color: #4b0081;
+        color: #fff;
+    }
+
+    .pagination .page-link {
+        color: #4b0081; /* Color morado para los enlaces de página */
+        border: 1px solid #ddd;
+        margin: 0 2px; /* Espacio entre los botones */
+    }
+
+        .pagination .page-link:hover {
+            background-color: #e0e0e0; /* Cambio de color al pasar el ratón */
+        }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #e9ecef;
+        border-color: #ddd;
+    }
+
+    .pagination i {
+        vertical-align: middle; /* Alinea verticalmente los iconos */
+    }
 </style>
 
 @Html.Partial("_CrearProductoModal", new ProyectommstoreConsumido.Models.Productos())
-
+@Html.Partial("_EditarProductoModal", new ProyectommstoreConsumido.Models.Productos())
 
 @Html.AntiForgeryToken()
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-
-
 
     <script>
         //js para mensaje de boton eliminar
@@ -172,7 +251,7 @@
 
     <script>
 
-//js para detalles
+        //js para detalles
         $(document).ready(function () {
             console.log("El script de detalles se está ejecutando."); // Verifica si el script se carga
 
@@ -195,7 +274,6 @@
             });
         });
     </script>
-
     <script>
         //js para ventana de registrar producto
         $(document).ready(function () {
@@ -210,8 +288,22 @@
                 console.error("No se encontraron el botón o el modal.");
             }
         });
-
     </script>
 
+    <script>
+        $(document).ready(function () {
+            $(".btnEditarProducto").click(function () {
+                $("#ProductoID").val($(this).data("producto-id"));
+                $("#NombreProducto").val($(this).data("nombre"));
+                $("#MarcaProducto").val($(this).data("marca"));
+                $("#ModeloProducto").val($(this).data("modelo"));
+                $("#DescripcionProducto").val($(this).data("descripcion"));
+                $("#PrecioProducto").val($(this).data("precio"));
+                $("#StockProducto").val($(this).data("stock"));
+                $("#CategoriaProducto").val($(this).data("categoria")); // Establece la categoría seleccionada
 
+                $("#editarProductoModal").modal("show");
+            });
+        });
+    </script>
 }

@@ -7,9 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="... integridad ..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Views/Shared/layout.css" />
+
+</head>
+<body>
     <style>
+
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -31,14 +36,9 @@
             position: fixed;
             top: 0;
             left: 0;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
+            transform: translateX(0); /* Menú siempre abierto */
             z-index: 1000;
         }
-
-            #sidebar.active {
-                transform: translateX(0);
-            }
 
             #sidebar h2 {
                 color: #ecf0f1;
@@ -63,31 +63,13 @@
                 }
 
         #main-content {
-            margin-left: 0;
-            width: 100%;
+            margin-left: 240px; /* Ajuste para el menú siempre abierto */
+            width: calc(100% - 240px); /* Ajuste para el menú siempre abierto */
             transition: margin-left 0.3s ease-in-out;
             padding: 20px;
         }
 
-            #main-content.shifted {
-                margin-left: 240px;
-            }
-
-        #menuToggle {
-            top: 15px; /* Ajusta según sea necesario */
-            left: 15px; /* Ajusta según sea necesario */
-            background-color: #343a40;
-            color: white;
-            border: none;
-            padding: 10px 12px;
-            font-size: 24px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            z-index: 1100; /* Asegura que esté por encima del sidebar */
-            position: absolute; /* O relative, dependiendo del contexto */
-        }
-
-        /*css para animacion al abrir el mensaje de cerrar sesion*/
+        /* Estilos para la animación del modal de cierre de sesión */
         #confirmLogoutModal .modal-dialog {
             transform: translateY(30px);
             opacity: 0;
@@ -100,7 +82,7 @@
         }
 
         #confirmLogoutModal.fade .modal-dialog {
-            transform: translateY(30px); /* Aseguramos el estado inicial para .fade también */
+            transform: translateY(30px);
             opacity: 0;
         }
 
@@ -108,20 +90,18 @@
             transform: translateY(0);
             opacity: 1;
         }
-    </style>
-</head>
-<body>
 
+    </style>
 
     <div id="wrapper">
-        <div id="sidebar" class="collapsed">
+        <div id="sidebar">
             <h2><i class="bi bi-box"></i> Inventario</h2>
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index", "Home")"><i class="bi bi-house-door"></i> Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#productosMenu"><i class="bi bi-wrench"></i> Mantenimiento</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#productosMenu" aria-expanded="false"><i class="bi bi-wrench"></i> Mantenimiento</a>
                     <div class="collapse" id="productosMenu">
                         <a class="nav-link ms-4" href="@Url.Action("PRODUCTO_LISTADO", "Producto")"><i class="bi bi-layers"></i>Productos</a>
                         <a class="nav-link ms-4" href="@Url.Action("USUARIO_LISTADO", "Usuario")"><i class="bi bi-person-lock"></i>Usuarios</a>
@@ -129,14 +109,13 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#stockMenu"><i class="bi bi-cash-stack"></i> Ventas</a>
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="collapse" href="#stockMenu" aria-expanded="false"><i class="bi bi-cash-stack"></i> Ventas</a>
                     <div class="collapse" id="stockMenu">
                         <a class="nav-link ms-4" href="@Url.Action("PEDIDO_LISTADO", "Pedido")">Pedidos</a>
-                        <a class="nav-link ms-4" href="#">Detalles</a
+                        <a class="nav-link ms-4" href="@Url.Action("DETALLE_PEDIDO_LISTADO" , "DetallePedido")">Detalles</a>
                     </div>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="@Url.Action("CrearPedido", "Compra")"><i class="bi bi-cart3"></i>Generar Venta</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Configuración</a></li>
                 <li class="nav-item">
                     <a href="#" class="nav-link cerrar-sesion-link btn btn-warning d-inline-flex align-items-center">
                         <i class="bi bi-power me-2"></i> Cerra Sesion
@@ -148,8 +127,6 @@
 
         <div id="main-content">
             <div class="container-fluid pt-4">
-                <button id="menuToggle"><i class="bi bi-bar-chart-steps"></i></button>
-
                 <hr class="my-4">
                 <div class="row">
                     @RenderBody()
@@ -162,7 +139,7 @@
         </div>
     </div>
 
-    
+
 
     <div id="confirmLogoutModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -203,21 +180,39 @@
     </script>
 
     <script>
-        //js para adarptar la pagina cuando se habra o cierra el menu lateral
         document.addEventListener('DOMContentLoaded', () => {
-            const toggleBtn = document.getElementById("menuToggle");
-            const sidebar = document.getElementById("sidebar");
-            const wrapper = document.getElementById("wrapper");
-            const mainContent = document.getElementById("main-content");
+            const productosMenuLink = document.querySelector('a[href="#productosMenu"]');
+            const stockMenuLink = document.querySelector('a[href="#stockMenu"]');
+            const productosMenuDiv = document.getElementById('productosMenu');
+            const stockMenuDiv = document.getElementById('stockMenu');
 
-            if (toggleBtn && sidebar && wrapper && mainContent) {
-                toggleBtn.addEventListener("click", () => {
-                    sidebar.classList.toggle("active");
-                    wrapper.classList.toggle("shifted");
-                    mainContent.classList.toggle("shifted");
-                });
-            } else {
-                console.error("Uno o más elementos del menú no se encontraron en el DOM.");
+            function toggleSubMenu(link, menuDiv) {
+                if (link && menuDiv) {
+                    link.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        menuDiv.classList.toggle('show');
+                        this.setAttribute('aria-expanded', menuDiv.classList.contains('show'));
+                    });
+                }
+            }
+
+            toggleSubMenu(productosMenuLink, productosMenuDiv);
+            toggleSubMenu(stockMenuLink, stockMenuDiv);
+
+            // Asegurar que los submenús estén cerrados por defecto al cargar la página
+            if (productosMenuDiv) {
+                productosMenuDiv.classList.remove('show');
+            }
+            if (stockMenuDiv) {
+                stockMenuDiv.classList.remove('show');
+            }
+
+            // Establecer aria-expanded a false inicialmente
+            if (productosMenuLink) {
+                productosMenuLink.setAttribute('aria-expanded', 'false');
+            }
+            if (stockMenuLink) {
+                stockMenuLink.setAttribute('aria-expanded', 'false');
             }
         });
     </script>

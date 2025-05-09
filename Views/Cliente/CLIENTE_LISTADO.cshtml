@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProyectommstoreConsumido.Models.Clientes>
+﻿@model ProyectommstoreConsumido.Models.ClienteListaViewModel
 
 @{
     ViewBag.Title = "CLIENTE_LISTADO";
@@ -12,10 +12,11 @@
     </section>
     <section class="content">
         <div class="box">
-            @* El título principal ya está en el content-header, no necesitamos otro header en el box *@
             <div class="box-body">
                 <div class="d-flex justify-content-end mb-3">
-                    <button id="btnNuevoCliente" class="btn  rounded-pill btn-sm" style="background-color: #4b0081; color: #e9ecef; border-collapse: collapse; ">  <i class="bi bi-plus-circle-fill me-2"></i> Nuevo Cliente</button>
+                    <button id="btnNuevoCliente" class="btn rounded-pill btn-sm" style="background-color: #4b0081; color: #e9ecef; border-collapse: collapse; ">
+                        <i class="bi bi-plus-circle-fill me-2"></i> Nuevo Cliente
+                    </button>
                 </div>
                 <div id="detallesCliente">
                 </div>
@@ -34,7 +35,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Clientes)
                             {
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.ClienteID)</td>
@@ -45,8 +46,19 @@
                                     <td>@Html.DisplayFor(modelItem => item.NrDocumento)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Documento)</td>
                                     <td class="text-center" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
-                                        <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-cliente-id="@item.ClienteID"><i class="bi bi-eye me-2"></i></button>
-                                        @Html.ActionLink("Editar", "Edit", new { id = item.ClienteID }, new { @class = "btn btn-sm btn-outline-primary rounded-pill me-1", style = "font-size: 0.75rem;" })
+                                        <button type="button" class="btn btn-sm btn-outline-primary btnEditarCliente rounded-pill"
+                                                data-cliente-id="@item.ClienteID"
+                                                data-nombre="@item.Nombre"
+                                                data-apellido="@item.Apellido"
+                                                data-email="@item.Email"
+                                                data-telefono="@item.Telefono"
+                                                data-nrdocumento="@item.NrDocumento"
+                                                data-documento="@item.Documento">
+                                            <i class="bi bi-pencil-fill me-2"></i> 
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-cliente-id="@item.ClienteID">
+                                            <i class="bi bi-eye me-2"></i>
+                                        </button>
                                         @using (Html.BeginForm("CLIENTE_ELIMINADO", "Cliente", new { id = item.ClienteID }, FormMethod.Post, new { @class = "formEliminarCliente" }))
                                         {
                                             @Html.AntiForgeryToken()
@@ -60,19 +72,68 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            @if (Model.PaginaActual > 1)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("CLIENTE_LISTADO", new { page = Model.PaginaActual - 1 })" class="page-link" aria-label="Previous">
+                                        <i class="bi bi-arrow-left-short"></i> 
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-label="Previous">
+                                        <i class="bi bi-arrow-left-short"></i> 
+                                    </span>
+                                </li>
+                            }
+
+                            @for (int i = Math.Max(1, Model.PaginaActual - 2); i <= Math.Min(Model.TotalPaginas, Model.PaginaActual + 2); i++)
+                            {
+                                <li class="page-item @(Model.PaginaActual == i ? "active" : "")">
+                                    <a href="@Url.Action("CLIENTE_LISTADO", new { page = i })" class="page-link">@i</a>
+                                </li>
+                            }
+
+                            @if (Model.PaginaActual < Model.TotalPaginas)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("CLIENTE_LISTADO", new { page = Model.PaginaActual + 1 })" class="page-link" aria-label="Next">
+                                         <i class="bi bi-arrow-right-short"></i>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-label="Next">
+                                        <i class="bi bi-arrow-right-short"></i>
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+
             </div>
         </div>
     </section>
 </div>
 
 <style>
-    /* Incluimos aquí los estilos relevantes de tu archivo CSS */
+    /* Estilos generales de la página */
     body {
         font-family: sans-serif;
         background-color: #f4f6f9;
         padding: 20px;
     }
 
+    /* Contenedor principal del contenido */
     .content-wrapper {
         background-color: #fff;
         padding: 20px;
@@ -80,6 +141,7 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    /* Encabezado de la sección de contenido */
     .content-header h1 {
         color: #333;
         margin-bottom: 20px;
@@ -87,6 +149,7 @@
         padding-bottom: 10px;
     }
 
+    /* Contenedor de la tabla y otros elementos */
     .box {
         background-color: #fff;
         margin-bottom: 20px;
@@ -94,10 +157,12 @@
         border: 1px solid #ddd;
     }
 
+    /* Cuerpo del contenedor */
     .box-body {
         padding: 15px;
     }
 
+    /* Estilos de la tabla */
     .table {
         width: 100%;
         border-collapse: collapse;
@@ -112,7 +177,7 @@
         }
 
         .table th {
-            background-color: #4b0081; /* Usando tu color morado */
+            background-color: #4b0081; /* Tu color morado */
             font-weight: bold;
             color: #fff;
         }
@@ -121,16 +186,35 @@
             background-color: #f9f9f9;
         }
 
-    h1 { /* Aplicando el estilo del h1 de tu referencia al h1 del header */
-        color: #333;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #673ab7;
-        padding-bottom: 10px;
+    /* Estilos para la paginación */
+    .pagination .page-item.active .page-link {
+        background-color: #4b0081; /* Color morado para la página activa */
+        border-color: #4b0081;
+        color: #fff;
     }
 
-    /* Ya no necesitamos el estilo para h3.box-title */
+    .pagination .page-link {
+        color: #4b0081; /* Color morado para los enlaces de página */
+        border: 1px solid #ddd;
+        margin: 0 2px; /* Espacio entre los botones */
+    }
+
+        .pagination .page-link:hover {
+            background-color: #e0e0e0; /* Cambio de color al pasar el ratón */
+        }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #e9ecef;
+        border-color: #ddd;
+    }
+
+    .pagination i {
+        vertical-align: middle; /* Alinea verticalmente los iconos */
+    }
 </style>
 
+@Html.Partial("_EditarClienteModal", new ProyectommstoreConsumido.Models.Clientes())
 @Html.Partial("_CrearClienteModal", new ProyectommstoreConsumido.Models.Clientes())
 
 @Html.AntiForgeryToken()
@@ -138,7 +222,37 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        //js para ventana de registrar producto
+        $(document).ready(function () {
+            $(".btnEditarCliente").click(function () {
+                console.log("Se hizo clic en el botón Editar Cliente");
+
+                // Extrae los datos del cliente de los atributos 'data-' del botón
+                var clienteId = $(this).data("cliente-id");
+                var nombre = $(this).data("nombre");
+                var apellido = $(this).data("apellido");
+                var email = $(this).data("email");
+                var telefono = $(this).data("telefono");
+                var nrDocumento = $(this).data("nrdocumento");
+                var documento = $(this).data("documento");
+
+                console.log("Número de Documento capturado:", nrDocumento);
+
+                // Asigna los valores a los campos del modal de edición
+                $("#ClienteID").val(clienteId);
+                $("#NombreCliente").val(nombre);
+                $("#ApellidoCliente").val(apellido);
+                $("#EmailCliente").val(email);
+                $("#TelefonoCliente").val(telefono);
+                $("#NrDocumentoCliente").val(nrDocumento);
+                $("#DocumentoCliente").val(documento);
+
+                // Muestra el modal de edición
+                $("#editarClienteModal").modal("show");
+            });
+        });
+    </script>
+    <script>
+        // Javascript para mostrar el modal de creación de un nuevo cliente
         $(document).ready(function () {
             var nuevoClienteBtn = document.getElementById("btnNuevoCliente");
             var crearClienteModal = document.getElementById("crearClienteModal");
@@ -148,15 +262,12 @@
                     $(crearClienteModal).modal('show');
                 });
             } else {
-                console.error("No se encontraron el botón o el modal.");
+                console.error("No se encontraron el botón o el modal de crear cliente.");
             }
         });
-
     </script>
-
-
     <script>
-        //js para mensaje de boton eliminar
+        // Javascript para confirmar la eliminación de un cliente usando SweetAlert
         document.addEventListener("DOMContentLoaded", function () {
             const botonesEliminar = document.querySelectorAll(".btnEliminarCliente");
 
@@ -182,24 +293,21 @@
             });
         });
     </script>
-
-
     <script>
-
-        //js para detalles
+        // Javascript para cargar los detalles de un cliente al hacer clic en "Ver Detalles" mediante AJAX
         $(document).ready(function () {
-            console.log("El script de detalles se está ejecutando."); // Verifica si el script se carga
+            console.log("El script de detalles se está ejecutando.");
 
             $(".btnVerDetalles").click(function () {
-                console.log("Se hizo clic en el botón Detalles."); // Verifica si el evento de clic se dispara
+                console.log("Se hizo clic en el botón Detalles.");
                 var ClienteID = $(this).data("cliente-id");
-                console.log("ID del cliente:", ClienteID); // Verifica si se obtiene el ID correctamente
+                console.log("ID del cliente:", ClienteID);
                 $.ajax({
-                    url: '@Url.Action("MostrarDetallesCliente", "Cliente")',
+                    url: '@Url.Action("MostrarDetallesCliente", "Cliente")', // URL de la acción del controlador para obtener detalles
                     type: 'GET',
-                    data: { id: ClienteID },
+                    data: { id: ClienteID }, // Envía el ID del cliente como parámetro
                     success: function (data) {
-                        $("#detallesCliente").html(data);
+                        $("#detallesCliente").html(data); // Actualiza el div con los detalles recibidos
                     },
                     error: function (error) {
                         console.error("Error al cargar los detalles:", error);
@@ -209,6 +317,4 @@
             });
         });
     </script>
-
-
 }

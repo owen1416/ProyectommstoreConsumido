@@ -37,13 +37,13 @@
                     </div>
 
                     <div class="mb-2">
-                        <label for="NrDocumento" class="form-label"><i class="bi bi-card-text-fill me-2"></i> Nro. Documento</label>
+                        <label for="NrDocumento" class="form-label"><i class="bi bi-file-earmark-text-fill me-2"></i> N° Documento</label>
                         @Html.EditorFor(model => model.NrDocumento, new { htmlAttributes = new { @class = "form-control rounded-pill form-control-sm", type = "number", placeholder = "Nro. Documento" } })
                         @Html.ValidationMessageFor(model => model.NrDocumento, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="mb-2">
-                        <label for="Documento" class="form-label"><i class="bi bi-file-earmark-text-fill me-2"></i> Tipo Documento</label>
+                        <label for="Documento" class="form-label"><i class="bi bi-card-text me-2"></i>Tipo Documento</label>
                         @Html.DropDownList("Documento", new SelectList(new List<string>()
                         {
                             "DNI",

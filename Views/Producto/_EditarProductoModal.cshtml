@@ -1,0 +1,159 @@
+﻿@model ProyectommstoreConsumido.Models.Productos
+
+<div class="modal fade custom-modal" id="editarProductoModal" tabindex="-1" role="dialog" aria-labelledby="editarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title" id="editarProductoModalLabel"><i class="bi bi-pencil-fill me-2"></i> Editar Producto</h5>
+            </div>
+            <div class="modal-body custom-modal-body">
+                @using (Html.BeginForm("PRODUCTO_EDITADO", "Producto", FormMethod.Post, new { id = "editarProductoForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    @Html.HiddenFor(model => model.ProductoID, new { id = "ProductoID" })
+
+                    <div class="mb-2">
+                        <label for="NombreProducto" class="form-label"><i class="bi bi-tag-fill me-2"></i> Nombre</label>
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control rounded-pill form-control-sm", id = "NombreProducto", placeholder = "Nombre" })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-2">
+                        <label for="MarcaProducto" class="form-label"><i class="bi bi-bookmark-fill me-2"></i> Marca</label>
+                        @Html.TextBoxFor(model => model.Marca, new { @class = "form-control rounded-pill form-control-sm", id = "MarcaProducto", placeholder = "Marca" })
+                        @Html.ValidationMessageFor(model => model.Marca, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-2">
+                        <label for="ModeloProducto" class="form-label"><i class="bi bi-layers-fill me-2"></i>Modelo</label>
+                        @Html.TextBoxFor(model => model.Modelo, new { @class = "form-control rounded-pill form-control-sm", id = "ModeloProducto", placeholder = "Modelo" })
+                        @Html.ValidationMessageFor(model => model.Modelo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-2">
+                        <label for="DescripcionProducto" class="form-label"><i class="bi bi-file-text-fill me-2"></i> Descripción</label>
+                        @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control rounded-pill form-control-sm", id = "DescripcionProducto", placeholder = "Descripción" })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-2">
+                        <label for="PrecioProducto" class="form-label"><i class="bi bi-cash-coin me-2"></i>  Precio</label>
+                        @Html.TextBoxFor(model => model.Precio, new { @class = "form-control rounded-pill form-control-sm", id = "PrecioProducto", placeholder = "Precio" })
+                        @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-2">
+                        <label for="StockProducto" class="form-label"><i class="bi bi-box-seam-fill me-2"></i>Stock</label>
+                        @Html.TextBoxFor(model => model.Stock, new { @class = "form-control rounded-pill form-control-sm", id = "StockProducto", placeholder = "Stock" })
+                        @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="mb-2">
+                        <label for="Categoria" class="form-label"><i class="bi bi-folder-fill me-2"></i> Categoría</label>
+                        @Html.DropDownListFor(model => model.Categoria, new SelectList(new List<object>
+                        {
+                            new { Value = "TEC", Text = "Teclados" },
+                            new { Value = "RAT", Text = "Ratones" },
+                            new { Value = "MON", Text = "Monitores" },
+                            new { Value = "IMP", Text = "Impresoras" }
+                        }, "Value", "Text"), "Seleccionar Categoría", new { @class = "form-select rounded-pill form-select-sm", id = "CategoriaProducto" })
+
+                        @Html.ValidationMessageFor(model => model.Categoria, "", new { @class = "text-danger" })
+                    </div>
+
+
+                    <div class="modal-footer custom-modal-footer d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-primary rounded-pill btn-lg"><i class="bi bi-save-fill me-2"></i> Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger rounded-pill btn-lg" data-bs-dismiss="modal" aria-label="Cerrar"><i class="bi bi-x-circle-fill me-2"></i> Cancelar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* Estilos generales del modal */
+    .custom-modal .modal-dialog {
+        max-width: 550px;
+        margin: 60px auto;
+    }
+
+    .custom-modal-content {
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        border: none;
+        background-color: #fff;
+        color: #495057;
+    }
+
+    /* Estilos del encabezado del modal */
+    .custom-modal-header {
+        background-color: #4b0081; /* Fondo azul primario */
+        color: #fff;
+        border-bottom: 3px solid #4b0070; /* Línea inferior oscura */
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .custom-modal-header .modal-title {
+            font-size: 1.05rem;
+            font-weight: 400;
+        }
+
+    /* Estilos del cuerpo del modal */
+    .custom-modal-body {
+        padding: 1.75rem 2rem;
+        background-color: #fff;
+    }
+
+    /* Estilos del pie de página del modal */
+    .custom-modal-footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+        .custom-modal-footer .btn {
+            border-radius: 25px; /* Pill shape */
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+        }
+
+        .custom-modal-footer .btn-primary {
+            background-color: #4b0081;
+            border-color: #4b0081;
+        }
+
+        .custom-modal-footer .btn-danger {
+            background-color: #F44336; /* Rojo claro */
+            border-color: #F44336;
+            box-shadow: 0 2px 4px rgba(255, 0, 0, 0.2); /* Sombra inicial */
+            color: white; /* Texto blanco */
+        }
+
+    /* Estilos adicionales para los labels e iconos */
+    .custom-modal-body .form-label {
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: center;
+    }
+
+        .custom-modal-body .form-label i {
+            margin-right: 0.5rem;
+            color: #4b0081; /* Color del icono */
+        }
+
+    .custom-modal-body .form-control {
+        border-radius: 25px !important; /* Asegura que los input también sean redondeados */
+        font-size: 0.9rem;
+    }
+
+    .custom-modal-body .text-danger {
+        font-size: 0.8rem;
+    }
+</style>

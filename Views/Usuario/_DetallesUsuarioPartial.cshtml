@@ -1,16 +1,35 @@
 ﻿
-
 @if (Model != null)
 {
     <div class="card shadow-sm p-3 mb-3 bg-light rounded">
-        <h5 class="card-title text-primary">Detalles del Usuario</h5>
+        <h5 class="card-title">Detalles del Usuario</h5>
         <div class="card-body">
-            <p class="card-text"><strong>Nombre:</strong> @Model.NombreUsuario</p>
-            <p class="card-text"><strong>Contraseña:</strong> @Model.password</p>
-            <p class="card-text"><strong>Email:</strong> @Model.Email</p>
-           
-      
-            <button type="button" class="btn btn-sm btn-outline-danger y mt-2" onclick="$('#detallesUsuario').empty();">Cerrar Detalles</button>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Nombre</strong></td>
+                            <td>@Model.NombreUsuario</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contraseña</strong></td>
+                            <td>@Model.password</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>@Model.Email</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="$('#detallesUsuario').empty();">Cerrar Detalles</button>
         </div>
     </div>
 }

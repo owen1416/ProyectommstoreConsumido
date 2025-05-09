@@ -1,0 +1,44 @@
+﻿
+@if (Model != null)
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>PedidoId:</strong></td>
+                    <td>@Model.PedidoID</td>
+                </tr>
+                <tr>
+                    <td><strong>ClienteId:</strong></td>
+                    <td>@Model.ClienteID</td>
+                </tr>
+                <tr>
+                    <td><strong>Fecha Pedido:</strong></td>
+                    <td>@Model.FechaPedido</td>
+                </tr>
+                <tr>
+                    <td><strong>Estado:</strong></td>
+                    <td>@Model.Estado</td>
+                </tr>
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td>@Model.Total.ToString("C")</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="$('#detallesPedido').empty();">Cerrar Detalles</button>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        No se encontraron detalles para este Cliente.
+    </div>
+}

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProyectommstoreConsumido.Models.Usuarios>
+﻿@model ProyectommstoreConsumido.Models.UsuarioListaViewModel
 
 @{
     ViewBag.Title = "USUARIO_LISTADO";
@@ -12,7 +12,6 @@
     </section>
     <section class="content">
         <div class="box">
-            @* El título principal ya está en el content-header, no necesitamos otro header en el box *@
             <div class="box-body">
                 <div class="d-flex justify-content-end mb-3">
                     <button id="btnNuevoUsuario" class="btn  rounded-pill btn-sm" style=" background-color: #4b0081; color: #e9ecef; border-collapse: collapse;"><i class="bi bi-plus-circle-fill me-2"></i> Nuevo Usuario</button>
@@ -29,10 +28,9 @@
                                 <th>Email</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
-
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Usuarios)
                             {
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.UsuarioID)</td>
@@ -40,8 +38,14 @@
                                     <td>@Html.DisplayFor(modelItem => item.password)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Email)</td>
                                     <td class="text-center" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
-                                        <button type="button" class="btn btn-sm btn-outline-success btnVerDetalles rounded-pill" data-usuario-id="@item.UsuarioID"><i class="bi bi-eye me-2"></i></button>
-                                        @Html.ActionLink("Editar", "Edit", new { id = item.UsuarioID }, new { @class = "btn btn-sm btn-outline-primary rounded-pill me-1", style = "font-size: 0.75rem;" })
+                                        <button type="button" class="btn btn-sm btn-outline-primary btnEditarUsuario rounded-pill"
+                                                data-usuario-id="@item.UsuarioID"
+                                                data-nombre="@item.NombreUsuario"
+                                                data-email="@item.Email"
+                                                data-password="@item.password">
+                                            <i class="bi bi-pencil-fill me-2"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-info btnVerDetalles rounded-pill" data-usuario-id="@item.UsuarioID"><i class="bi bi-eye me-2"></i></button>
                                         @using (Html.BeginForm("USUARIO_ELIMINADO", "Usuario", new { id = item.UsuarioID }, FormMethod.Post, new { @class = "formEliminarUsuario" }))
                                         {
                                             @Html.AntiForgeryToken()
@@ -54,6 +58,52 @@
                             }
                         </tbody>
                     </table>
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            @if (Model.PaginaActual > 1)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("USUARIO_LISTADO", new { page = Model.PaginaActual - 1 })" class="page-link" aria-label="Previous">
+                                        <i class="bi bi-arrow-left-short"></i> 
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-label="Previous">
+                                        <i class="bi bi-arrow-left-short"></i> 
+                                    </span>
+                                </li>
+                            }
+
+                            @for (int i = Math.Max(1, Model.PaginaActual - 2); i <= Math.Min(Model.TotalPaginas, Model.PaginaActual + 2); i++)
+                            {
+                                <li class="page-item @(Model.PaginaActual == i ? "active" : "")">
+                                    <a href="@Url.Action("USUARIO_LISTADO", new { page = i })" class="page-link">@i</a>
+                                </li>
+                            }
+
+                            @if (Model.PaginaActual < Model.TotalPaginas)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("USUARIO_LISTADO", new { page = Model.PaginaActual + 1 })" class="page-link" aria-label="Next">
+                                        <i class="bi bi-arrow-right-short"></i>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-label="Next">
+                                         <i class="bi bi-arrow-right-short"></i>
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -124,16 +174,66 @@
     }
 
     /* Ya no necesitamos el estilo para h3.box-title */
+
+    /* Estilos para la paginación */
+    .pagination .page-item.active .page-link {
+        background-color: #4b0081; /* Color morado para la página activa */
+        border-color: #4b0081;
+        color: #fff;
+    }
+
+    .pagination .page-link {
+        color: #4b0081; /* Color morado para los enlaces de página */
+        border: 1px solid #ddd;
+        margin: 0 2px; /* Espacio entre los botones */
+    }
+
+        .pagination .page-link:hover {
+            background-color: #e0e0e0; /* Cambio de color al pasar el ratón */
+        }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #e9ecef;
+        border-color: #ddd;
+    }
+
+    .pagination i {
+        vertical-align: middle; /* Alinea verticalmente los iconos */
+    }
 </style>
 
 @Html.Partial("_CrearUsuarioModal", new ProyectommstoreConsumido.Models.RegistroViewModel())
+@Html.Partial("_EditarUsuarioModal", new ProyectommstoreConsumido.Models.Usuarios())
 
 @Html.AntiForgeryToken()
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        //js para ventana de registrar Usuario
+        //js para ventana de editar usuario
+        $(document).ready(function () {
+            $(".btnEditarUsuario").click(function () {
+                // Obtener los datos del usuario
+                var usuarioId = $(this).data("usuario-id");
+                var nombreUsuario = $(this).data("nombre");
+                var email = $(this).data("email");
+                var password = $(this).data("password");
+
+                // Poner los datos en los campos del modal
+                $("#editarUsuarioModal #UsuarioID").val(usuarioId);
+                $("#editarUsuarioModal #NombreUsuario").val(nombreUsuario);
+                $("#editarUsuarioModal #Email").val(email);
+                $("#editarUsuarioModal #Password").val(password);
+
+                // Mostrar el modal de edición
+                $("#editarUsuarioModal").modal('show');
+            });
+        });
+    </script>
+
+    <script>
+        //js para ventana de registrar usuario
         $(document).ready(function () {
             var nuevoUsuarioBtn = document.getElementById("btnNuevoUsuario");
             var crearUsuarioModal = document.getElementById("crearUsuarioModal");
@@ -146,7 +246,6 @@
                 console.error("No se encontraron el botón o el modal.");
             }
         });
-
     </script>
 
     <script>

@@ -1,7 +1,7 @@
 ﻿@model ProyectommstoreConsumido.Models.Usuarios
-
 @{
     Layout = null;
+    ViewBag.Title = "Iniciar Sesión";
 }
 
 <!DOCTYPE html>
@@ -9,11 +9,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
+    <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
-            background-image: url('https://images.hdqwalls.com/download/taj-mahal-minimal-art-4k-wu-1920x1080.jpg'); /* Reemplaza con tu imagen */
+            background-image: url('https://images.hdqwalls.com/download/taj-mahal-minimal-art-4k-wu-1920x1080.jpg'); /* Reemplaza con tu imagen si es diferente */
             background-size: cover;
             background-position: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,18 +22,18 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: rgba(0, 0, 0, 0.2); /* Capa oscura semitransparente */
-            background-blend-mode: multiply; /* Modo de mezcla para oscurecer la imagen */
+            background-color: rgba(0, 0, 0, 0.2);
+            background-blend-mode: multiply;
         }
 
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco casi opaco */
+        .login-container { /* Usamos un nombre más general */
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 40px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 360px;
-            border: 1px solid #ddd; /* Borde para la tarjeta */
+            border: 1px solid #ddd;
         }
 
         h2 {
@@ -45,6 +45,7 @@
         .form-group {
             margin-bottom: 20px;
             text-align: left;
+            position: relative;
         }
 
         label {
@@ -56,209 +57,121 @@
 
         .input-group {
             position: relative;
+            display: flex;
+            align-items: center;
         }
 
             .input-group i {
                 position: absolute;
-                left: 10px;
+                left: 0;
                 top: 50%;
                 transform: translateY(-50%);
                 color: #777;
-                font-size: 1.1em; /* Iconos ligeramente más grandes */
+                font-size: 1.1em;
+                margin-right: 8px;
             }
+
         .form-control {
             width: 100%;
-            padding: 10px 0; /* Reducir el padding vertical y eliminar el horizontal */
-            border: none; /* Eliminar el borde */
-            border-bottom: 3px solid rgba(0, 0, 0, 0.2); /* Aumentar el grosor del borde inferior a 3px */
-            border-radius: 0; /* Eliminar los bordes redondeados */
+            padding: 10px 0;
+            border: none;
+            border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+            border-radius: 0;
             box-sizing: border-box;
             font-size: 16px;
-            background-color: transparent; /* Hacer el fondo del input transparente */
-            color: #333; /* Color del texto */
+            background-color: transparent;
+            color: #333;
+            padding-left: 25px; /* Espacio para el icono */
         }
 
             .form-control::placeholder {
                 color: #bbb;
             }
 
-        .input-group i {
-            position: absolute;
-            left: 0; /* Ajustar la posición del icono a la izquierda */
-            top: 50%;
-            transform: translateY(-50%);
-            color: #777;
-            font-size: 1.1em;
-            margin-right: 8px; /* Añadir margen derecho para separar del texto */
-        }
-
-        .input-group {
-            position: relative;
-            display: flex; /* Usar flex para alinear icono y input */
-            align-items: center; /* Alinear verticalmente */
-        }
-
-            .input-group .form-control {
-                padding-left: 25px; /* Ajustar el padding izquierdo para dejar espacio al icono */
-            }
-        .checkbox-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            color: #777;
-            font-size: 0.9em;
-        }
-
-            .checkbox-group input[type="checkbox"] {
-                margin-right: 5px;
-            }
-
-        .btn-login {
-            background: linear-gradient(90deg, #3f51b5, #e040fb); /* Degradado azul a rosa más cercano */
+        .btn-login { /* Nuevo nombre para el botón de login */
+            background: linear-gradient(90deg, #3f51b5, #e040fb);
             color: white;
-            padding: 14px 0; /* Padding vertical y horizontal 0 para el ancho completo */
+            padding: 14px 0;
             border: none;
-            border-radius: 50px; /* Bordes completamente redondeados */
+            border-radius: 50px;
             cursor: pointer;
             font-size: 18px;
-            width: 100%; /* El botón ocupa todo el ancho del contenedor */
+            width: 100%;
             transition: background 0.3s ease;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
         }
 
             .btn-login:hover {
-                background: linear-gradient(90deg, #283593, #c2185b); /* Degradado más oscuro al pasar el ratón */
+                background: linear-gradient(90deg, #283593, #c2185b);
             }
 
-        .separator {
-            color: #777;
-            margin: 20px 0;
-            position: relative;
-        }
-
-            .separator::before,
-            .separator::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 0;
-                right: 0;
-                height: 1px;
-                background-color: #ddd;
-                transform: translateY(-50%);
-            }
-
-            .separator span {
-                background-color: #f9f9f9;
-                padding: 0 10px;
-                position: relative;
-                z-index: 1;
-            }
-
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .social-btn {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.3em; /* Iconos sociales ligeramente más grandes */
-            cursor: pointer;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-            .social-btn:hover {
-                border-color: #bbb;
-                box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-            }
-
-            .social-btn i {
-                color: #333;
-            }
-
-            .social-btn .fa-facebook-f {
-                color: #1877f2;
-            }
-
-            .social-btn .fa-google {
-                color: #db4437;
-            }
-
-            .social-btn .fa-twitter {
-                color: #1da1f2;
-            }
-
-        .register-link {
+        .register-link { /* Mantenemos el nombre, aunque ahora sea para registrarse */
             color: #777;
             font-size: 0.9em;
+            margin-top: 20px;
         }
 
             .register-link a {
                 color: #007bff;
                 text-decoration: none;
             }
+
+        .validation-summary-errors {
+            color: red;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        .field-validation-error {
+            color: red;
+            font-size: 0.9em;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2><i class="fas fa-user"></i> Acceder</h2>
-        @using (Html.BeginForm("LOGIN", "Login", FormMethod.Post))
+        <h2><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</h2>
+        @using (Html.BeginForm("LOGIN", "Login", FormMethod.Post, new { @class = "form-horizontal" }))
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
 
             <div class="form-group">
                 <label for="NombreUsuario">Usuario</label>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     @Html.TextBoxFor(m => m.NombreUsuario, new { @class = "form-control", placeholder = "Tu usuario" })
+                    @Html.ValidationMessageFor(m => m.NombreUsuario, "", new { @class = "field-validation-error" })
                 </div>
-                @Html.ValidationMessageFor(m => m.NombreUsuario, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
-                <label for="password"> Contraseña</label>
+                <label for="password">Contraseña</label>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
                     @Html.PasswordFor(m => m.password, new { @class = "form-control", placeholder = "Tu contraseña" })
+                    @Html.ValidationMessageFor(m => m.password, "", new { @class = "field-validation-error" })
                 </div>
-                @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="checkbox-group">
-                <label>
-                    <input type="checkbox"> Recordarme
-                </label>
-                <a href="#"><i class="fas fa-question-circle"></i> ¿Olvidaste tu contraseña?</a>
             </div>
 
             <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
 
-            <div class="separator"><span>O accede con</span></div>
-
-            <div class="social-login">
-                <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
-                <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
-            </div>
-
             <div class="register-link">
-                ¿No tienes cuenta? <a href="@Url.Action("Register", "Login")"><i class="fas fa-user-plus"></i> Regístrate</a>
+                ¿No tienes una cuenta? <a href="@Url.Action("Register", "Login")"><i class="fas fa-user-plus"></i> Regístrate</a>
             </div>
         }
     </div>
 
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    {}
 </body>
 </html>

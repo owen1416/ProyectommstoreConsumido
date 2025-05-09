@@ -1,30 +1,29 @@
-﻿@model IEnumerable<ProyectommstoreConsumido.Models.Pedidos>
+﻿@model IEnumerable<ProyectommstoreConsumido.Models.DetallePedido>
 
 @{
-    ViewBag.Title = "Listado de Pedidos";
+    ViewBag.Title = "Listado de Detalles de Pedido";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que tu layout sea correcto
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <div class="content-wrapper">
     <section class="content-header">
-        <h1>Listado de Pedidos</h1>
+        <h1>Listado de Detalles de Pedido</h1>
     </section>
     <section class="content">
         <div class="box">
-            @* Eliminamos el box-header que decía "Pedidos" *@
             <div class="box-body">
-                <div id="detallesPedido">
-                </div>
+                <div id="detallesDetallesPedido"></div>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>PedidoID</th>
-                                <th>ClienteID</th>
-                                <th>Fecha Pedido</th>
-                                <th>Estado</th>
-                                <th>Total</th>
+                                <th>ProductoID</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Subtotal</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -33,17 +32,16 @@
                             {
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.PedidoID)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.ClienteID)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.FechaPedido)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Estado)</td>
-                                    <td>S/. @Html.DisplayFor(modelItem => item.Total)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.ProductoID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Cantidad)</td>
+                                    <td> $@Html.DisplayFor(modelItem => item.PrecioUnitario)</td>
+                                    <td> $@Html.DisplayFor(modelItem => item.Subtotal)</td>
                                     <td class="text-center" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
-                                        <button type="button" class="btn btn-sm btn-outline-primary btnVerDetalles rounded-pill" data-pedido-id="@item.PedidoID"><i class="bi bi-eye me-2"></i></button>
-
-                                        @using (Html.BeginForm("PEDIDO_ELIMINADO", "PEDIDO", new { id = item.PedidoID }, FormMethod.Post, new { @class = "formEliminarPedido" }))
+                                        <button type="button" class="btn btn-sm btn-outline-primary btnVerDetalles rounded-pill" data-detalle-id="@item.DetallePedidoID"><i class="bi bi-eye me-2"></i></button>
+                                        @using (Html.BeginForm("DETALLE_PEDIDO_ELIMINADO", "DetallePedido", new { id = item.DetallePedidoID }, FormMethod.Post, new { @class = "formEliminarDetallePedido" }))
                                         {
                                             @Html.AntiForgeryToken()
-                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill btnEliminarPedido" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill btnEliminarDetalle" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal">
                                                 <i class="bi bi-trash-fill me-1"></i>
                                             </button>
                                         }
@@ -53,13 +51,13 @@
                         </tbody>
                     </table>
                 </div>
+                </>
             </div>
-        </div>
     </section>
 </div>
 
 <style>
-    /* Incluimos aquí los estilos relevantes de tu archivo CSS */
+    /* Estilos Generales */
     body {
         font-family: sans-serif;
         background-color: #f4f6f9;
@@ -78,6 +76,7 @@
         margin-bottom: 20px;
         border-bottom: 2px solid #673ab7;
         padding-bottom: 10px;
+        font-size: 1.8em;
     }
 
     .box {
@@ -114,12 +113,63 @@
             background-color: #f9f9f9;
         }
 
-    h1 { /* Aplicando el estilo del h1 de tu referencia al h1 del header */
+    h1 {
         color: #333;
         margin-bottom: 20px;
         border-bottom: 2px solid #673ab7;
         padding-bottom: 10px;
     }
+
+    /* Estilos de los botones de acción */
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.875rem;
+        border-radius: 0.2rem;
+    }
+
+    .btn-outline-success {
+        color: #198754;
+        border-color: #198754;
+    }
+
+        .btn-outline-success:hover {
+            background-color: #198754;
+            color: #fff;
+            border-color: #198754;
+        }
+
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+            border-color: #dc3545;
+        }
+
+    .btn-outline-info {
+        color: #0dcaf0;
+        border-color: #0dcaf0;
+    }
+
+        .btn-outline-info:hover {
+            background-color: #0dcaf0;
+            color: #fff;
+            border-color: #0dcaf0;
+        }
+
+    .btn-outline-primary {
+        color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
 </style>
 
 
@@ -129,9 +179,10 @@
 
 
 
-    <script>//js para mensaje de boton eliminar
+    <script>
+        //js para mensaje de boton eliminar
         document.addEventListener("DOMContentLoaded", function () {
-            const botonesEliminar = document.querySelectorAll(".btnEliminarPedido");
+            const botonesEliminar = document.querySelectorAll(".btnEliminarDetalle");
 
             botonesEliminar.forEach(boton => {
                 boton.addEventListener("click", function () {
@@ -139,7 +190,7 @@
 
                     Swal.fire({
                         title: '¿Estás seguro?',
-                        text: "Este Pedido será eliminado permanentemente.",
+                        text: "Este Detalle Pedido será eliminado permanentemente.",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
@@ -153,34 +204,35 @@
                     });
                 });
             });
-        });</script>
+        });
+    </script>
+
 
     <script>
 
-//js para detalles
+        //js para detalles
         $(document).ready(function () {
             console.log("El script de detalles se está ejecutando."); // Verifica si el script se carga
 
             $(".btnVerDetalles").click(function () {
                 console.log("Se hizo clic en el botón Detalles."); // Verifica si el evento de clic se dispara
-                var pedidoId = $(this).data("pedido-id");
-                console.log("ID del producto:", pedidoId); // Verifica si se obtiene el ID correctamente
+                var DetallePedidoID = $(this).data("detalle-id");
+                console.log("ID del Detalle Pedido:", DetallePedidoID); // Verifica si se obtiene el ID correctamente
                 $.ajax({
-                    url: '@Url.Action("MostrarDetallesPedido", "Pedido")',
+                    url: '@Url.Action("MostrarDetallesDetallePedido", "DetallePedido")',
                     type: 'GET',
-                    data: { id: pedidoId },
+                    data: { id: DetallePedidoID },
                     success: function (data) {
-                        $("#detallesPedido").html(data);
+                        $("#detallesDetallesPedido").html(data);
                     },
                     error: function (error) {
                         console.error("Error al cargar los detalles:", error);
-                        $("#detallesPedido").html("<p>Error al cargar los detalles del Pedido.</p>");
+                        $("#detallesDetallesPedido").html("<p>Error al cargar los detalles del Detalles Pedido.</p>");
                     }
                 });
             });
         });
     </script>
-
 
 
 }

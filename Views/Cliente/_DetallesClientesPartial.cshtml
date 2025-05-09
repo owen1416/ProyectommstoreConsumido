@@ -1,20 +1,43 @@
 ﻿
-
 @if (Model != null)
 {
-    <div class="card shadow-sm p-3 mb-3 bg-light rounded">
-        <h5 class="card-title text-primary">Detalles del Cliente</h5>
-        <div class="card-body">
-            <p class="card-text"><strong>Nombre:</strong> @Model.Nombre</p>
-            <p class="card-text"><strong>Apellido:</strong> @Model.Apellido</p>
-            <p class="card-text"><strong>Email:</strong> @Model.Email</p>
-            <p class="card-text"><strong>Telefono:</strong> @Model.Telefono</p>
-            <p class="card-text"><strong>Numero Documento:</strong> @Model.NrDocumento</p>
-            <p class="card-text"><strong>Documento:</strong> @Model.Documento</p>
-          
-            <button type="button" class="btn btn-sm btn-outline-danger y mt-2" onclick="$('#detallesCliente').empty();">Cerrar Detalles</button>
-        </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Nombre:</strong></td>
+                    <td>@Model.Nombre</td>
+                </tr>
+                <tr>
+                    <td><strong>Apellido:</strong></td>
+                    <td>@Model.Apellido</td>
+                </tr>
+                <tr>
+                    <td><strong>Email:</strong></td>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <td><strong>Teléfono:</strong></td>
+                    <td>@Model.Telefono</td>
+                </tr>
+                <tr>
+                    <td><strong>Numero Documento:</strong></td>
+                    <td>@Model.NrDocumento</td>
+                </tr>
+                <tr>
+                    <td><strong>Documento:</strong></td>
+                    <td>@Model.Documento</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+    <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="$('#detallesCliente').empty();">Cerrar Detalles</button>
 }
 else
 {

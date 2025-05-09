@@ -4,6 +4,7 @@ using ProyectommstoreConsumido.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,31 +16,51 @@ namespace ProyectommstoreConsumido.Controllers
 {
     public class ProductoController : Controller
     {
-        // GET: Producto
+
+        // Tamaño de página fijo (puedes configurarlo)
+        private const int PageSize = 10;
 
         [HttpGet]
-        public ActionResult PRODUCTO_LISTADO()
+        public ActionResult PRODUCTO_LISTADO(int? page)
         {
-            List<Productos> lista = null;
+            int pageNumber = (page ?? 1);
+            List<Productos> todosLosProductos = null;
+
             string url = "https://localhost:44380/api/pro/getall";
             HttpClient client = new HttpClient();
             var respuesta = client.GetAsync(url).Result;
+
             if (respuesta.IsSuccessStatusCode)
             {
                 var contenido = respuesta.Content.ReadAsStringAsync().Result;
-                lista = JsonConvert.DeserializeObject<List<Productos>>(contenido);
+                todosLosProductos = JsonConvert.DeserializeObject<List<Productos>>(contenido);
                 Debug.WriteLine(contenido);
-
             }
             else
             {
-                Debug.WriteLine("Error.......");
-                lista = new List<Productos>();
-
+                Debug.WriteLine("Error al obtener los productos de la API.");
+                todosLosProductos = new List<Productos>();
             }
 
-            return View(lista);
-        }
+            // Paginación en el cliente
+            int totalProductos = todosLosProductos.Count();
+            int totalPages = (int)Math.Ceiling((double)totalProductos / PageSize);
+            int skip = (pageNumber - 1) * PageSize;
+            var productosPaginados = todosLosProductos
+            .Skip(skip)
+                                       .Take(PageSize)
+                                       .ToList();
+
+            var viewModel = new ProductoListaViewModel
+            {
+                Productos = productosPaginados,
+                PaginaActual = pageNumber,
+                TotalPaginas = totalPages
+            };
+
+            return View(viewModel);
+        } 
+
 
         [HttpGet]
         public ActionResult PRODUCTO_INSERTADO()
@@ -80,40 +101,29 @@ namespace ProyectommstoreConsumido.Controllers
         }
 
 
-        [HttpPost] // Mantenemos HttpPost para el formulario
+        [HttpPost]
         public async Task<ActionResult> PRODUCTO_ELIMINADO(int id)
         {
             if (ModelState.IsValid)
             {
                 string url = $"https://localhost:44380/api/pro/delete?id={id}";
-                HttpClient client = new HttpClient();
-
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
-
-                try
+                using (HttpClient client = new HttpClient())
                 {
-                    HttpResponseMessage respuesta = await client.SendAsync(request);
-
-                    if (respuesta.IsSuccessStatusCode)
+                    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
+                    try
                     {
-                        TempData["MensajeEliminacion"] = "El producto se eliminó correctamente.";
-                        TempData["Tipo"] = "success";
+                        await client.SendAsync(request);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        TempData["Mensaje"] = "No se pudo eliminar el producto";
-                        TempData["Tipo"] = "error";
+                        Debug.WriteLine($"Excepción al llamar a la API de eliminación: {ex.Message}");
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Excepción al llamar a la API de eliminación: {ex.Message}");
-                    TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar el producto.";
                 }
             }
             return RedirectToAction("PRODUCTO_LISTADO");
         }
-        
+
+
         [HttpGet]
         public  async Task<ActionResult> MostrarDetallesProducto(int id)
         {
@@ -135,6 +145,53 @@ namespace ProyectommstoreConsumido.Controllers
 
             // Asumiendo que solo esperas un producto, toma el primero de la lista
             return PartialView("_DetallesProductoPartial", producto);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> PRODUCTO_EDITADO(int id)
+        {
+            Productos producto = null;
+            string url = $"https://localhost:44380/api/pro/{id}";
+            HttpClient client = new HttpClient();
+            var respuesta = await client.GetAsync(url);
+            if (respuesta.IsSuccessStatusCode)
+            {
+                var contenido = await respuesta.Content.ReadAsStringAsync();
+                producto = JsonConvert.DeserializeObject<Productos>(contenido);
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "No se pudo cargar el producto.";
+                producto = new Productos();
+            }
+
+            return View(producto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PRODUCTO_EDITADO(Productos producto)
+        {
+            if (ModelState.IsValid)
+            {
+                string url = "https://localhost:44380/api/pro/editar";
+                HttpClient client = new HttpClient();
+                string jsonProducto = JsonConvert.SerializeObject(producto);
+                var content = new StringContent(jsonProducto, System.Text.Encoding.UTF8, "application/json");
+
+                var respuesta = await client.PutAsync(url, content);
+
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("PRODUCTO_LISTADO");
+                }
+                else
+                {
+                    Debug.WriteLine($"Error al editar producto: {respuesta.StatusCode}");
+                    ViewBag.ErrorMessage = "Error al editar el producto. Inténtelo de nuevo.";
+                }
+            }
+
+            return View(producto);
         }
 
 

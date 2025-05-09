@@ -11,41 +11,39 @@ using System.Web.Mvc;
 
 namespace ProyectommstoreConsumido.Controllers
 {
-    public class PedidoController : Controller
+    public class DetallePedidoController : Controller
     {
 
-
         [HttpGet]
-        public ActionResult PEDIDO_LISTADO()
+        public ActionResult DETALLE_PEDIDO_LISTADO()
         {
-            List<Pedidos> lista = null;
-            string url = "https://localhost:44380/api/pedido/getall";
+            List<DetallePedido> lista = null;
+            string url = "https://localhost:44380/api/detalle/getall";
             HttpClient client = new HttpClient();
             var respuesta = client.GetAsync(url).Result;
             if (respuesta.IsSuccessStatusCode)
             {
                 var contenido = respuesta.Content.ReadAsStringAsync().Result;
-                lista = JsonConvert.DeserializeObject<List<Pedidos>>(contenido);
+                lista = JsonConvert.DeserializeObject<List<DetallePedido>>(contenido);
                 Debug.WriteLine(contenido);
 
             }
             else
             {
                 Debug.WriteLine("Error.......");
-                lista = new List<Pedidos>();
+                lista = new List<DetallePedido>();
 
             }
 
             return View(lista);
         }
 
-
         [HttpPost]
-        public async Task<ActionResult> PEDIDO_ELIMINADO(int id)
+        public async Task<ActionResult> DETALLE_PEDIDO_ELIMINADO(int id)
         {
             if (ModelState.IsValid)
             {
-                string url = $"https://localhost:44380/api/pedido/{id}";
+                string url = $"https://localhost:44380/api/detalle/{id}";
                 using (HttpClient client = new HttpClient())
                 {
                     HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
@@ -59,32 +57,31 @@ namespace ProyectommstoreConsumido.Controllers
                     }
                 }
             }
-            return RedirectToAction("PEDIDO_LISTADO");
+            return RedirectToAction("DETALLE_PEDIDO_LISTADO");
         }
 
-
-
         [HttpGet]
-        public async Task<ActionResult> MostrarDetallesPedido(int id)
+        public async Task<ActionResult> MostrarDetallesDetallePedido(int id)
         {
-            Pedidos pedidos = null;
-            string url = $"https://localhost:44380/api/pedido/{id}";
+            DetallePedido detallePedido = null;
+            string url = $"https://localhost:44380/api/detalle/{id}";
             HttpClient client = new HttpClient();
             var respuesta = client.GetAsync(url).Result;
             if (respuesta.IsSuccessStatusCode)
             {
                 var contenido = await respuesta.Content.ReadAsStringAsync();
-                pedidos = JsonConvert.DeserializeObject<Pedidos>(contenido);
+                detallePedido = JsonConvert.DeserializeObject<DetallePedido>(contenido);
                 Debug.WriteLine(contenido);
             }
             else
             {
                 Debug.WriteLine("Error al obtener detalles del producto.");
-                pedidos = new Pedidos();
+                detallePedido = new DetallePedido();
             }
 
             // Asumiendo que solo esperas un producto, toma el primero de la lista
-            return PartialView("_DetallesPedidoPartial", pedidos);
+            return PartialView("_DetallesDetallePedidoPartial", detallePedido);
         }
+
     }
 }

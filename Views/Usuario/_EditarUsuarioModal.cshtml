@@ -1,0 +1,43 @@
+﻿@model ProyectommstoreConsumido.Models.Usuarios
+
+<div class="modal fade custom-modal" id="editarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title" id="editarUsuarioModalLabel">
+                    <i class="bi bi-pencil-fill me-2"></i> Editar Usuario
+                </h5>
+            </div>
+            <div class="modal-body custom-modal-body">
+                @using (Html.BeginForm("USUARIO_EDITADO", "Usuario", FormMethod.Post, new { id = "formEditarUsuario" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.UsuarioID)
+
+                    <div class="mb-2">
+                        <label for="NombreUsuario" class="form-label"><i class="bi bi-person-fill me-2"></i> Nombre</label>
+                        @Html.TextBoxFor(model => model.NombreUsuario, new { @class = "form-control rounded-pill form-control-sm", id = "NombreUsuario", placeholder = "Nombre" })
+                        @Html.ValidationMessageFor(model => model.NombreUsuario, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Password" class="form-label"><i class="bi bi-shield-lock-fill me-2"></i> Contraseña</label>
+                        @Html.TextBoxFor(model => model.password, new { @class = "form-control rounded-pill form-control-sm", id = "Password", placeholder = "Contraseña", type = "password" })
+                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Email" class="form-label"><i class="bi bi-envelope-fill me-2"></i> Email</label>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control rounded-pill form-control-sm", id = "Email", placeholder = "Email", type = "email" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="modal-footer custom-modal-footer d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-primary rounded-pill btn-lg"><i class="bi bi-save-fill me-2"></i> Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger rounded-pill btn-lg" data-bs-dismiss="modal" aria-label="Cerrar"><i class="bi bi-x-circle-fill me-2"></i> Cancelar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

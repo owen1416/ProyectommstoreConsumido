@@ -1,0 +1,64 @@
+﻿@model ProyectommstoreConsumido.Models.Clientes
+
+<div class="modal fade custom-modal" id="editarClienteModal" tabindex="-1" role="dialog" aria-labelledby="editarClienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title" id="editarClienteModalLabel"><i class="bi bi-person-lines-fill me-2"></i> Editar Cliente</h5>
+            </div>
+            <div class="modal-body custom-modal-body">
+                @using (Html.BeginForm("CLIENTE_EDITADO", "Cliente", FormMethod.Post, new { id = "formEditarCliente" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.ClienteID)
+
+                    <div class="mb-2">
+                        <label for="NombreCliente" class="form-label"><i class="bi bi-person-fill me-2"></i> Nombre</label>
+                        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control rounded-pill form-control-sm", id = "NombreCliente", placeholder = "Nombre" })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="ApellidoCliente" class="form-label"><i class="bi bi-person-fill me-2"></i> Apellido</label>
+                        @Html.TextBoxFor(model => model.Apellido, new { @class = "form-control rounded-pill form-control-sm", id = "ApellidoCliente", placeholder = "Apellido" })
+                        @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="EmailCliente" class="form-label"><i class="bi bi-envelope-fill me-2"></i> Email</label>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control rounded-pill form-control-sm", id = "EmailCliente", placeholder = "Email", type = "email" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="TelefonoCliente" class="form-label"><i class="bi bi-telephone-fill me-2"></i> Teléfono</label>
+                        @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control rounded-pill form-control-sm", id = "TelefonoCliente", placeholder = "Teléfono" })
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="NrDocumentoCliente" class="form-label"><i class="bi bi-file-earmark-text-fill me-2"></i> N° Documento</label>
+                        @Html.TextBoxFor(model => model.NrDocumento, new { @class = "form-control rounded-pill form-control-sm", id = "NrDocumentoCliente", placeholder = "N° Documento" })
+                        @Html.ValidationMessageFor(model => model.NrDocumento, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="Documento" class="form-label"><i class="bi bi-card-text me-2"></i>Tipo Documento</label>
+                        @Html.DropDownList("Documento", new SelectList(new List<string>()
+                        {
+                            "DNI",
+                            "Pasaporte",
+                            "Carnet de Extranjería"
+                        }), "Seleccionar Documento", new { @class = "form-select rounded-pill form-select-sm" })
+                        @Html.ValidationMessageFor(model => model.Documento, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="modal-footer custom-modal-footer d-flex justify-content-center gap-3">
+                        <button type="submit" class="btn btn-primary rounded-pill btn-lg"><i class="bi bi-save-fill me-2"></i> Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger rounded-pill btn-lg" data-bs-dismiss="modal" aria-label="Cerrar"><i class="bi bi-x-circle-fill me-2"></i> Cancelar</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

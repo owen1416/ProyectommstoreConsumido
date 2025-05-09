@@ -14,8 +14,7 @@ namespace ProyectommstoreConsumido.Models
 
         // Propiedades adicionales para la respuesta de la API de login
         public bool IsAuthenticated { get; set; }
-        public string Token { get; set; }
-        public string ErrorMessage { get; set; }        
+           
 
 
         public Usuarios()
@@ -25,8 +24,7 @@ namespace ProyectommstoreConsumido.Models
             this.password = "";
             Email = "";
             IsAuthenticated = true;
-            Token = "";
-            ErrorMessage = "";    
+               
         }
 
         public Usuarios(int usuarioID, string nombreUsuario, string password, string email, bool isAuthenticated, string token, string errorMessage)
@@ -36,8 +34,7 @@ namespace ProyectommstoreConsumido.Models
             this.password = password;
             Email = email;
             IsAuthenticated = isAuthenticated;
-            Token = token;
-            ErrorMessage = errorMessage;
+      
         }
     }
 }

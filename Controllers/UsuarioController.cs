@@ -3,6 +3,7 @@ using ProyectommstoreConsumido.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -14,31 +15,50 @@ namespace ProyectommstoreConsumido.Controllers
 {
     public class UsuarioController : Controller
     {
-        // GET: Usuario
+
+        // Tamaño de página fijo (puedes configurarlo)
+        private const int PageSize = 2;
+   
         [HttpGet]
-        public ActionResult USUARIO_LISTADO()
+        public ActionResult USUARIO_LISTADO(int? page)
         {
-            List<Usuarios> lista = null;
+            int pageNumber = (page ?? 1);
+            List<Usuarios> todosLosUsuarios = null;
+
             string url = "https://localhost:44380/api/usuario/getall";
             HttpClient client = new HttpClient();
             var respuesta = client.GetAsync(url).Result;
+
             if (respuesta.IsSuccessStatusCode)
             {
                 var contenido = respuesta.Content.ReadAsStringAsync().Result;
-                lista = JsonConvert.DeserializeObject<List<Usuarios>>(contenido);
+                todosLosUsuarios = JsonConvert.DeserializeObject<List<Usuarios>>(contenido);
                 Debug.WriteLine(contenido);
-
             }
             else
             {
-                Debug.WriteLine("Error.......");
-                lista = new List<Usuarios>();
-
+                Debug.WriteLine("Error al obtener los usuarios de la API.");
+                todosLosUsuarios = new List<Usuarios>();
             }
 
-            return View(lista);
-        }
+            // Paginación en el cliente
+            int totalUsuarios = todosLosUsuarios.Count();
+            int totalPages = (int)Math.Ceiling((double)totalUsuarios / PageSize);
+            int skip = (pageNumber - 1) * PageSize;
+            var usuariosPaginados = todosLosUsuarios
+            .Skip(skip)
+                                    .Take(PageSize)
+                                    .ToList();
 
+            var viewModel = new UsuarioListaViewModel
+            {
+                Usuarios = usuariosPaginados,
+                PaginaActual = pageNumber,
+                TotalPaginas = totalPages
+            };
+
+            return View(viewModel);
+        }
 
         [HttpGet]
         public ActionResult USUARIO_INSERTADO()
@@ -93,36 +113,24 @@ namespace ProyectommstoreConsumido.Controllers
             }
             return PartialView("_CrearUsuarioModal", model);
         }
-
+        [HttpGet]
         [HttpPost]
         public async Task<ActionResult> USUARIO_ELIMINADO(int id)
         {
             if (ModelState.IsValid)
             {
                 string url = $"https://localhost:44380/api/usuario/{id}";
-                HttpClient client = new HttpClient();
-
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
-
-                try
+                using (HttpClient client = new HttpClient())
                 {
-                    HttpResponseMessage respuesta = await client.SendAsync(request);
-
-                    if (respuesta.IsSuccessStatusCode)
+                    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, url);
+                    try
                     {
-                        TempData["MensajeEliminacion"] = "El producto se eliminó correctamente.";
-                        TempData["Tipo"] = "success";
+                        await client.SendAsync(request);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        TempData["Mensaje"] = "No se pudo eliminar el producto";
-                        TempData["Tipo"] = "error";
+                        Debug.WriteLine($"Excepción al llamar a la API de eliminación: {ex.Message}");
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Excepción al llamar a la API de eliminación: {ex.Message}");
-                    TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar el producto.";
                 }
             }
             return RedirectToAction("USUARIO_LISTADO");
@@ -150,6 +158,60 @@ namespace ProyectommstoreConsumido.Controllers
 
             // Asumiendo que solo esperas un producto, toma el primero de la lista
             return PartialView("_DetallesUsuarioPartial", usuarios);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> USUARIO_EDITADO(int id)
+        {
+            Usuarios usuario = null;
+            string url = $"https://localhost:44380/api/usuario/{id}";
+            using (var client = new HttpClient())
+            {
+                var respuesta = await client.GetAsync(url);
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    var contenido = await respuesta.Content.ReadAsStringAsync();
+                    usuario = JsonConvert.DeserializeObject<Usuarios>(contenido);
+                    Debug.WriteLine(contenido);
+                }
+                else
+                {
+                    Debug.WriteLine("Error al obtener usuario para editar.");
+                    return RedirectToAction("USUARIO_LISTADO");
+                }
+            }
+            return View(usuario);
+        }
+
+        // POST: USUARIO_EDITADO (envía el PUT)
+        [HttpPost]
+        public async Task<ActionResult> USUARIO_EDITADO(Usuarios model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            string url = $"https://localhost:44380/api/usuario/{model.UsuarioID}";
+            using (var client = new HttpClient())
+            {
+                var json = JsonConvert.SerializeObject(model);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var respuesta = await client.PutAsync(url, content);
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    TempData["Mensaje"] = "Usuario actualizado correctamente.";
+                    TempData["Tipo"] = "success";
+                    return RedirectToAction("USUARIO_LISTADO");
+                }
+                else
+                {
+                    var error = await respuesta.Content.ReadAsStringAsync();
+                    ModelState.AddModelError("", $"Error al actualizar: {error}");
+                    TempData["Tipo"] = "error";
+                }
+            }
+
+            return View(model);
         }
 
 

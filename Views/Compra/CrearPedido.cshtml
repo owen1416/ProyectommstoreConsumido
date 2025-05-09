@@ -5,6 +5,77 @@
     Layout = "~/Views/Shared/_Layout.cshtml"; // Asumiendo que tienes un layout principal
 }
 
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Crear Nuevo Pedido
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Detalles del Cliente</h3>
+                    </div>
+                    @using (Html.BeginForm("CrearPedido", "Compra", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="box-body">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ClienteId, new { @class = "col-sm-2 control-label" })
+                                <div class="col-sm-10">
+                                    @Html.TextBoxFor(m => m.ClienteId, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.ClienteId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Agregar Productos al Pedido</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="nuevoProductoId">Producto ID</label>
+                                    <input type="number" class="form-control" id="nuevoProductoId" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="nuevaCantidad">Cantidad</label>
+                                    <input type="number" class="form-control" id="nuevaCantidad" value="1" min="1" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <button type="button" id="agregarATabla" class="btn btn-success">Agregar a Tabla</button>
+                                </div>
+                            </div>
+
+                            <h4>Productos en el Pedido</h4>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Producto ID</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaPedidoItems">
+                                </tbody>
+                            </table>
+
+                            <div id="itemsCompra" style="display:none;">
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            @Html.ActionLink("Volver", "Index", "Home", new { @class = "btn btn-default" })
+                            <button type="submit" class="btn btn-primary pull-right">Generar Compra</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
 <style>
     /* Estilos Generales (Base) */
     body {
@@ -166,76 +237,6 @@
         margin-bottom: 8px;
     }
 </style>
-
-<div class="content-wrapper">
-    <section class="content-header">
-        <h1>
-            Crear Nuevo Pedido
-        </h1>
-    </section>
-
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Detalles del Cliente</h3>
-                    </div>
-                    @using (Html.BeginForm("CrearPedido", "Compra", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="box-body">
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.ClienteId, new { @class = "col-sm-2 control-label" })
-                                <div class="col-sm-10">
-                                    @Html.TextBoxFor(m => m.ClienteId, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(m => m.ClienteId, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Agregar Productos al Pedido</h3>
-                        </div>
-                        <div class="box-body">
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="nuevoProductoId">Producto ID</label>
-                                    <input type="number" class="form-control" id="nuevoProductoId" />
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="nuevaCantidad">Cantidad</label>
-                                    <input type="number" class="form-control" id="nuevaCantidad" value="1" min="1" />
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <button type="button" id="agregarATabla" class="btn btn-success">Agregar a Tabla</button>
-                                </div>
-                            </div>
-
-                            <h4>Productos en el Pedido</h4>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Producto ID</th>
-                                        <th>Cantidad</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaPedidoItems">
-                                </tbody>
-                            </table>
-
-                            <div id="itemsCompra" style="display:none;">
-                            </div>
-                        </div>
-                        <div class="box-footer">
-                            @Html.ActionLink("Volver", "Index", "Home", new { @class = "btn btn-default" })
-                            <button type="submit" class="btn btn-primary pull-right">Generar Compra</button>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
 @section Scripts {
     <script>
         const agregarATablaBtn = document.getElementById("agregarATabla");
